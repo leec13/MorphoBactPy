@@ -723,7 +723,7 @@ class Morph(object):
 	@staticmethod
 	def log2(n) : return math.log(n)/math.log(2)
 	
-	def __Out(self): print("out")
+	def Out(self): print("out")
 
 	
 
@@ -753,7 +753,7 @@ class Morph(object):
 		self.__light=False
 		self.__distot=0.00
 		self.__flexangle=0.00
-		print "dropbox mescell10"
+		print "dropbox MorphoBactProject"
 	
 #---------- end constructor---------
 #---------- getteurs----------------
@@ -1026,7 +1026,7 @@ if __name__ == "__main__":
 		m.setMidParams(20, 5)
 		midline=m.MidAxis
 		imp1.setRoi(midline)
-		print m.out()
+		print m.Out()
 	else :
 		rm = RoiManager.getInstance()
 		rois = rm.getRoisAsArray()

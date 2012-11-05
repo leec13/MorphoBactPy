@@ -812,7 +812,7 @@ class StackCells(swing.JFrame):
 		nslices = self.__impRes.getImageStackSize() 
 		rt = ResultsTable()
 		rt.show("RT-"+self.__name)
-		twpoints = TextWindow("points-"+self.__name, "index\tlabel\tname\tx\ty\taxis\tw\th", "", 200, 450)
+		twpoints = TextWindow("points-"+self.__name, "index\tlabel\tname\tx\ty\taxis\tcellw\tcellh", "", 200, 450)
 		twlabels = TextWindow("labels-"+self.__name, "index\tlabel\tname\tnpoints", "", 200, 450)
 
 		isres = self.__impRes.getImageStack()
@@ -882,19 +882,37 @@ class StackCells(swing.JFrame):
 			yc = rect.height/2.00
 
 			for i in range(rect.width*rect.height) :
-				mc20 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)
-				mc02 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)
-				mc11 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)
 
-				mc30 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
-				mc03 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
-				mc21 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
-				mc12 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+				xcrel = (xCoord[i]-xc)/xc
+				ycrel = (yCoord[i]-yc)/yc
+			
+				#mc20 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)
+				#mc02 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)
+				#mc11 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)
+				#
+				#mc30 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
+				#mc03 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+				#mc21 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
+				#mc12 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+				#
+				#mc40 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
+				#mc04 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+				#mc31 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
+				#mc13 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
 
-				mc40 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
-				mc04 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
-				mc31 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
-				mc13 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+				mc20 += currentPixel[i]*xcrel*xcrel
+				mc02 += currentPixel[i]*ycrel*ycrel
+				mc11 += currentPixel[i]*xcrel*ycrel
+				
+				mc30 += currentPixel[i]*xcrel*xcrel*xcrel
+				mc03 += currentPixel[i]*ycrel*ycrel*ycrel
+				mc21 += currentPixel[i]*xcrel*xcrel*ycrel
+				mc12 += currentPixel[i]*xcrel*ycrel*ycrel
+				
+				mc40 += currentPixel[i]*xcrel*xcrel*xcrel*xcrel
+				mc04 += currentPixel[i]*ycrel*ycrel*ycrel*ycrel
+				mc31 += currentPixel[i]*xcrel*xcrel*xcrel*ycrel
+				mc13 += currentPixel[i]*xcrel*ycrel*ycrel*ycrel
 
 			
 			for i in range(rect.width*rect.height) :
@@ -961,6 +979,12 @@ class StackCells(swing.JFrame):
 			rt.addValue("ymKurt", ymKurt)
 
 			rt.addValue("Ecm", ecm)
+
+			rt.addValue("roiw", rect.width)
+			rt.addValue("roih", rect.height)
+
+			rt.addValue("cellw", self.__ipw[index-1])
+			rt.addValue("cellh", self.__iph[index-1])
 
 			self.__impRes.killRoi()
 
