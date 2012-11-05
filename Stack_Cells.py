@@ -23,7 +23,8 @@ import math
 
 username=getpass.getuser()
 
-mypath=os.path.expanduser(IJ.getDirectory("plugins")+"MeasureCells")
+#mypath=os.path.expanduser(IJ.getDirectory("plugins")+"MeasureCells")
+mypath=os.path.expanduser(os.path.join("~","Dropbox","MacrosDropBox","py","MorphoBactProject"))
 sys.path.append(mypath)
 
 from org.python.core import codecs
@@ -527,7 +528,6 @@ class StackCells(swing.JFrame):
 				self.__impF.setSlice(pos)
 				self.__impF.setRoi(roi)
 				m=Morph(self.__impF, roi)
-
 				m.setMidParams(10, 2)
 				midroi=m.MidAxis
 				if midroi == None : continue
