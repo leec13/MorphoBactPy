@@ -753,7 +753,7 @@ class Morph(object):
 		self.__light=False
 		self.__distot=0.00
 		self.__flexangle=0.00
-		print "dropbox MorphoBactProject"
+		#print "dropbox MorphoBactProject"
 	
 #---------- end constructor---------
 #---------- getteurs----------------
