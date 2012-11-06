@@ -1026,7 +1026,7 @@ if __name__ == "__main__":
 		m.setMidParams(20, 5)
 		midline=m.MidAxis
 		imp1.setRoi(midline)
-		print m.Out()
+		#print m.Out()
 	else :
 		rm = RoiManager.getInstance()
 		rois = rm.getRoisAsArray()

@@ -883,8 +883,8 @@ class StackCells(swing.JFrame):
 
 			for i in range(rect.width*rect.height) :
 
-				xcrel = (xCoord[i]-xc)
-				ycrel = (yCoord[i]-yc)
+				xcrel = xCoord[i]-xc
+				ycrel = yCoord[i]-yc
 			
 				#mc20 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)
 				#mc02 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)
