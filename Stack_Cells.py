@@ -534,7 +534,7 @@ class StackCells(swing.JFrame):
 
 				raf = m.MaxFeret/midroi.getLength()
 				
-				if self.__maxraf < raf < self.__minraf : continue
+				if (self.__maxraf < raf) or (raf < self.__minraf) : continue
 
 				maxsol = float(self.__display7.text)
 				minsol = float(self.__display8.text)
