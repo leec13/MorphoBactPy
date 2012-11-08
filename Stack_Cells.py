@@ -23,6 +23,8 @@ import math
 
 username=getpass.getuser()
 
+#test
+
 #mypath=os.path.expanduser(IJ.getDirectory("plugins")+"MeasureCells")
 mypath=os.path.expanduser(os.path.join("~","Dropbox","MacrosDropBox","py","MorphoBactProject"))
 sys.path.append(mypath)
