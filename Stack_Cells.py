@@ -61,6 +61,7 @@ class StackCells(swing.JFrame):
 		self.__labels = []
 		self.__maxraf = 1.1
 		self.__minraf = 0.0
+		self.__conEllipses = False
 
 		self.__dictCells = {}
 		
@@ -189,10 +190,6 @@ class StackCells(swing.JFrame):
 		self.__box6.setText("Auto Align Left")
 		self.__box6.setSelected(True)
 
-		self.__box9=swing.JCheckBox(actionPerformed=self.__boxaction9)
-		self.__box9.setText("Auto Align Center")
-		self.__box9.setSelected(False)
-
 		self.__box7=swing.JCheckBox(actionPerformed=self.__boxaction7)
 		self.__box7.setText("Auto Enlarge")
 		self.__box7.setSelected(True)
@@ -200,6 +197,14 @@ class StackCells(swing.JFrame):
 		self.__box8=swing.JCheckBox(actionPerformed=self.__boxaction8)
 		self.__box8.setText("Measures")
 		self.__box8.setSelected(True)
+		
+		self.__box9=swing.JCheckBox(actionPerformed=self.__boxaction9)
+		self.__box9.setText("Auto Align Center")
+		self.__box9.setSelected(False)
+		
+		self.__box10=swing.JCheckBox(actionPerformed=self.__boxaction10)
+		self.__box10.setText("Use ellipses")
+		self.__box10.setSelected(False)
 		
 		checkpanel.add(self.__box0)
 		checkpanel.add(self.__box1)
@@ -211,6 +216,7 @@ class StackCells(swing.JFrame):
 		checkpanel.add(self.__box7)
 		checkpanel.add(self.__box8)
 		checkpanel.add(self.__box9)
+		checkpanel.add(self.__box10)
 		
 		grid = awt.GridLayout()
 		grid.setRows(10)
@@ -662,7 +668,10 @@ class StackCells(swing.JFrame):
 	def __boxaction9(self, event):
 		self.__alignC = event.getSource().isSelected()
 		#self.__setDisplay(str(event.getSource().text)+" is "+str(event.getSource().isSelected()))
-
+	
+	def __boxaction10(self, event):
+		self.__conEllipses = event.getSource().isSelected()
+	
 	def __favg(self) :
 		zp = ZProjector(self.__impRes) 
 		zp.setMethod(ZProjector.AVG_METHOD)
