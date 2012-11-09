@@ -539,12 +539,12 @@ class StackCells(swing.JFrame):
 				imp3 = Duplicator().run(imp2,1,1)
 				ip3=imp3.getProcessor()
 				
-					if int(self.__display5.text) < ip3.getWidth() < int(self.__display6.text) : 
-						self.__iplist.append(ip3)
-						self.__display.text = self.__name + " cell " + str(len(self.__iplist))
-						fer=Line(params[0],params[1],params[3],params[4])
-						self.__cellsrois.append((ellipse, pos))
-						self.__labels.append(self.__isF.getShortSliceLabel(pos))
+				if int(self.__display5.text) < ip3.getWidth() < int(self.__display6.text) : 
+					self.__iplist.append(ip3)
+					self.__display.text = self.__name + " cell " + str(len(self.__iplist))
+					fer=Line(params[0],params[1],params[2],params[3])
+					self.__cellsrois.append((ellipse, pos))
+					self.__labels.append(self.__isF.getShortSliceLabel(pos))
 				continue
 			
 			if roi.getType() in [6,7] : 
@@ -629,7 +629,7 @@ class StackCells(swing.JFrame):
 					continue
 
 			else : 
-				#print "wrong type"
+				print "out loop"
 				continue
 			
 			straightener = Straightener()
