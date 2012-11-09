@@ -525,6 +525,28 @@ class StackCells(swing.JFrame):
 
 			if lab==None : lab=str(pos)
 			
+			if self.__conEllipses :
+				IJ.selectWindow(self.__impF.getTitle())
+				self.__impF.setRoi(roielement)
+				IJ.run(self.__impF,  "Fit Ellipse", "")
+				ellipse=imp.getRoi()
+				params = ellipse.getParams()
+				ferets = ellipse.getFeretValues()
+				imp2 = Duplicator().run(self.__impF,pos,pos)
+				IJ.run(imp2, "Rotate... ", "angle="+str(ferets[1])+" grid=0 interpolation=Bilinear enlarge slice")
+				temproi=Roi((imp2.getWidth()-ferets[0])/2.0,(imp2.getHeight()-ferets[2])/2.0,ferets[0],ferets[2])
+				imp2.setRoi(temproi)
+				imp3 = Duplicator().run(imp2,1,1)
+				ip3=imp3.getProcessor()
+				
+					if int(self.__display5.text) < ip3.getWidth() < int(self.__display6.text) : 
+						self.__iplist.append(ip3)
+						self.__display.text = self.__name + " cell " + str(len(self.__iplist))
+						fer=Line(params[0],params[1],params[3],params[4])
+						self.__cellsrois.append((ellipse, pos))
+						self.__labels.append(self.__isF.getShortSliceLabel(pos))
+				continue
+			
 			if roi.getType() in [6,7] : 
 				self.__impF.setSlice(pos)
 				self.__impF.setRoi(roi)
