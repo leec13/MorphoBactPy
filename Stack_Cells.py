@@ -545,8 +545,13 @@ class StackCells(swing.JFrame):
 					self.__iplist.append(ip3)
 					self.__display.text = self.__name + " cell " + str(len(self.__iplist))
 					fer=Line(params[0],params[1],params[2],params[3])
-					self.__cellsrois.append((ellipse, pos))
+					self.__cellsrois.append((fer, pos))
 					self.__labels.append(self.__isF.getShortSliceLabel(pos))
+
+				m=Morph(self.__impF, roi)
+
+				twres.append(lab+tab+str(roi.getName())+tab+str(m.Solidity)+tab+str(m.Area)+tab+str(m.Circ)+tab+str(m.AR)+tab+str(m.MaxFeret)+tab+str(fer.getLength())+tab+str(1)+tab+str(0)+tab+str(0)+tab+str(0))
+				
 				continue
 			
 			if roi.getType() in [6,7] : 
