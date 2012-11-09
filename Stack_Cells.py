@@ -527,9 +527,11 @@ class StackCells(swing.JFrame):
 			
 			if self.__conEllipses :
 				IJ.selectWindow(self.__impF.getTitle())
-				self.__impF.setRoi(roielement)
+				self.__impF.setSlice(pos)
+				self.__impF.setRoi(roi)
+				self.__rm.runCommand("Add")
 				IJ.run(self.__impF,  "Fit Ellipse", "")
-				ellipse=imp.getRoi()
+				ellipse=self.__impF.getRoi()
 				params = ellipse.getParams()
 				ferets = ellipse.getFeretValues()
 				imp2 = Duplicator().run(self.__impF,pos,pos)
@@ -538,7 +540,7 @@ class StackCells(swing.JFrame):
 				imp2.setRoi(temproi)
 				imp3 = Duplicator().run(imp2,1,1)
 				ip3=imp3.getProcessor()
-				
+
 				if int(self.__display5.text) < ip3.getWidth() < int(self.__display6.text) : 
 					self.__iplist.append(ip3)
 					self.__display.text = self.__name + " cell " + str(len(self.__iplist))
