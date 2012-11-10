@@ -740,11 +740,14 @@ class StackCells(swing.JFrame):
 		newimage.updateAndDraw()
 		
 		listip = []
+		maxh=self.__impRes.getHeight()
+
 		for roi in self.__cellsrois : 
 			straightener = Straightener()
 			newimage.setSlice(roi[1])
 			newimage.setRoi(roi[0])
-			listip.append(straightener.straighten(newimage, roi[0], int(self.__widthl)))
+			#listip.append(straightener.straighten(newimage, roi[0], int(self.__widthl)))
+			listip.append(straightener.straighten(newimage, roi[0], maxh))
 		
 		ipw=[ ip.getWidth() for ip in listip ]
 		iph=[ ip.getHeight() for ip in listip ]
