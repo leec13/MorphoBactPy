@@ -551,7 +551,8 @@ class StackCells(swing.JFrame):
 				m=Morph(self.__impF, roi)
 
 				twres.append(lab+tab+str(roi.getName())+tab+str(m.Solidity)+tab+str(m.Area)+tab+str(m.Circ)+tab+str(m.AR)+tab+str(m.MaxFeret)+tab+str(fer.getLength())+tab+str(1)+tab+str(0)+tab+str(0)+tab+str(0))
-				
+				self.__dictCells[count]=(str(roi.getName()), lab, roi)
+				count=count+1
 				continue
 			
 			if roi.getType() in [6,7] : 
@@ -1042,6 +1043,14 @@ class StackCells(swing.JFrame):
 			for y in range(ipmax.getHeight()) :
 				for x in range(ipmax.getWidth()) :
 					if ipmax.getPixelValue(x,y) > 0 : 
+						#print str(index)
+						#print lab
+						#print nameroi
+						#print str(x)
+						#print str(y)
+						#print str(self.__cellsrois[index-1][0].getLength())
+						#print str(self.__ipw[index-1])
+						#print str(self.__iph[index-1])
 						twpoints.append(str(index)+"\t"+lab+"\t"+nameroi+"\t"+str(x)+"\t"+str(y)+"\t"+str(self.__cellsrois[index-1][0].getLength())+"\t"+str(self.__ipw[index-1])+"\t"+str(self.__iph[index-1]))
 						npointsmax+=1
 			rt.addValue("npoints", npointsmax)
