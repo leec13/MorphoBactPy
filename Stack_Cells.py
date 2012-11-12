@@ -59,7 +59,7 @@ class StackCells(swing.JFrame):
 		self.__cellsrois = []
 		self.__Cutoff = 0
 		self.__labels = []
-		self.__maxraf = 1.1
+		self.__maxraf = 100.0
 		self.__minraf = 0.0
 		self.__conEllipses = False
 
