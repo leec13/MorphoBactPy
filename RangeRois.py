@@ -20,7 +20,9 @@ from ij.gui import Overlay, NonBlockingGenericDialog, Roi
 from ij.plugin.filter import ParticleAnalyzer
 
 
-mypath=os.path.expanduser(IJ.getDirectory("plugins")+"MeasureCells")
+#mypath=os.path.expanduser(IJ.getDirectory("plugins")+"MeasureCells")
+mypath=os.path.expanduser(os.path.join("~","Dropbox","MacrosDropBox","py","MorphoBactProject"))
+
 #mypath=os.path.expanduser("~/Dropbox/MacrosDropBox/py/MeasureCells_7")
 #mypath=os.path.expanduser(os.path.join("~","Dropbox","MacrosDropBox","py","MeasureCells_7"))
 sys.path.append(mypath)
