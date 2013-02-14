@@ -854,7 +854,7 @@ class StackCells(swing.JFrame):
 		nslices = self.__impRes.getImageStackSize() 
 		rt = ResultsTable()
 		rt.show("RT-"+self.__name)
-		twpoints = TextWindow("points-"+self.__name, "index\tlabel\tname\tx\ty\taxis\tcellw\tcellh", "", 200, 450)
+		if self.__maxfinder : twpoints = TextWindow("points-"+self.__name, "index\tlabel\tname\tx\ty\taxis\tcellw\tcellh", "", 200, 450)
 		twlabels = TextWindow("labels-"+self.__name, "index\tlabel\tname\tnpoints", "", 200, 450)
 
 		isres = self.__impRes.getImageStack()
@@ -1040,23 +1040,16 @@ class StackCells(swing.JFrame):
 			#lab = self.__labels[index-1]
 			nameroi = self.__dictCells[index][0]
 			lab = self.__dictCells[index][1]
-			
-			self.__impMax.setSlice(index)
-			ipmax = self.__impMax.getProcessor()
-			for y in range(ipmax.getHeight()) :
-				for x in range(ipmax.getWidth()) :
-					if ipmax.getPixelValue(x,y) > 0 : 
-						#print str(index)
-						#print lab
-						#print nameroi
-						#print str(x)
-						#print str(y)
-						#print str(self.__cellsrois[index-1][0].getLength())
-						#print str(self.__ipw[index-1])
-						#print str(self.__iph[index-1])
-						twpoints.append(str(index)+"\t"+lab+"\t"+nameroi+"\t"+str(x)+"\t"+str(y)+"\t"+str(self.__cellsrois[index-1][0].getLength())+"\t"+str(self.__ipw[index-1])+"\t"+str(self.__iph[index-1]))
-						npointsmax+=1
-			rt.addValue("npoints", npointsmax)
+
+			if self.__maxfinder : 
+				self.__impMax.setSlice(index)
+				ipmax = self.__impMax.getProcessor()
+				for y in range(ipmax.getHeight()) :
+					for x in range(ipmax.getWidth()) :
+						if ipmax.getPixelValue(x,y) > 0 : 
+							twpoints.append(str(index)+"\t"+lab+"\t"+nameroi+"\t"+str(x)+"\t"+str(y)+"\t"+str(self.__cellsrois[index-1][0].getLength())+"\t"+str(self.__ipw[index-1])+"\t"+str(self.__iph[index-1]))
+							npointsmax+=1
+				rt.addValue("npoints", npointsmax)
 
 			twlabels.append(str(index)+"\t"+lab+"\t"+nameroi+"\t"+str(npointsmax))
 			rt.show("RT-"+self.__name)
