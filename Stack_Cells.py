@@ -119,7 +119,7 @@ class StackCells(swing.JFrame):
 		label.setText("Fluo threshold ?")
 		northpanel2.add(label)
 		self.__display4 = swing.JTextField(preferredSize=(50, 30), horizontalAlignment=swing.SwingConstants.LEFT)
-		self.__display4.text = "170"
+		self.__display4.text = "1"
 		northpanel2.add(self.__display4)
 		
 		#northpanel3=swing.JPanel(awt.FlowLayout(awt.FlowLayout.LEFT))
