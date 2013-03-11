@@ -859,7 +859,9 @@ class StackCells(swing.JFrame):
 
 		isres = self.__impRes.getImageStack()
 		
-		for index in range(1, nslices+1):	
+		for index in range(1, nslices+1):
+			pc = (index*100)/nslices
+			IJ.showStatus("Je suis a "+str(pc)+"%")
 			self.__impRes.setSlice(index)
 			self.__impRes.killRoi()
 			roi = self.__listrois[index-1]
@@ -904,123 +906,123 @@ class StackCells(swing.JFrame):
 			mm13 = 0.00
 			
 			
-			for y in range(rect.y, rect.y+rect.height, 1) :
-				for x in range(rect.x, rect.x+rect.width, 1) :
-					xCoord.append(x+0.5)
-					yCoord.append(y+0.5)
-					#pixel=ip.getf(x,y)-self.__Cutoff
-					pixel = ip.getPixelValue(x,y)-self.__Cutoff
-					if pixel < 0 : pixel = 0
-					currentPixel.append(pixel)
-					m00 += currentPixel[-1]
-					m10 += currentPixel[-1]*xCoord[-1]
-					m01 += currentPixel[-1]*yCoord[-1]
+			#for y in range(rect.y, rect.y+rect.height, 1) :
+			#	for x in range(rect.x, rect.x+rect.width, 1) :
+			#		xCoord.append(x+0.5)
+			#		yCoord.append(y+0.5)
+			#		#pixel=ip.getf(x,y)-self.__Cutoff
+			#		pixel = ip.getPixelValue(x,y)-self.__Cutoff
+			#		if pixel < 0 : pixel = 0
+			#		currentPixel.append(pixel)
+			#		m00 += currentPixel[-1]
+			#		m10 += currentPixel[-1]*xCoord[-1]
+			#		m01 += currentPixel[-1]*yCoord[-1]
 
 
-			xm = m10/(m00+0.00000001)
-			ym = m01/(m00+0.00000001)
+			#xm = m10/(m00+0.00000001)
+			#ym = m01/(m00+0.00000001)
 
-			xc = rect.width/2.00
-			yc = rect.height/2.00
+			#xc = rect.width/2.00
+			#yc = rect.height/2.00
 
-			for i in range(rect.width*rect.height) :
+			#for i in range(rect.width*rect.height) :
 
-				xcrel = xCoord[i]-xc
-				ycrel = yCoord[i]-yc
+			#	xcrel = xCoord[i]-xc
+			#	ycrel = yCoord[i]-yc
 			
-				#mc20 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)
-				#mc02 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)
-				#mc11 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)
-				#
-				#mc30 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
-				#mc03 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
-				#mc21 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
-				#mc12 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)
-				#
-				#mc40 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
-				#mc04 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
-				#mc31 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
-				#mc13 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+			#	#mc20 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)
+			#	#mc02 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)
+			#	#mc11 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)
+			#	#
+			#	#mc30 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
+			#	#mc03 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+			#	#mc21 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
+			#	#mc12 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+			#	#
+			#	#mc40 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)
+			#	#mc04 += currentPixel[i]*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
+			#	#mc31 += currentPixel[i]*(xCoord[i]-xc)*(xCoord[i]-xc)*(xCoord[i]-xc)*(yCoord[i]-yc)
+			#	#mc13 += currentPixel[i]*(xCoord[i]-xc)*(yCoord[i]-yc)*(yCoord[i]-yc)*(yCoord[i]-yc)
 
-				mc20 += currentPixel[i]*xcrel*xcrel
-				mc02 += currentPixel[i]*ycrel*ycrel
-				mc11 += currentPixel[i]*xcrel*ycrel
+			#	mc20 += currentPixel[i]*xcrel*xcrel
+			#	mc02 += currentPixel[i]*ycrel*ycrel
+			#	mc11 += currentPixel[i]*xcrel*ycrel
 				
-				mc30 += currentPixel[i]*xcrel*xcrel*xcrel
-				mc03 += currentPixel[i]*ycrel*ycrel*ycrel
-				mc21 += currentPixel[i]*xcrel*xcrel*ycrel
-				mc12 += currentPixel[i]*xcrel*ycrel*ycrel
+			#	mc30 += currentPixel[i]*xcrel*xcrel*xcrel
+			#	mc03 += currentPixel[i]*ycrel*ycrel*ycrel
+			#	mc21 += currentPixel[i]*xcrel*xcrel*ycrel
+			#	mc12 += currentPixel[i]*xcrel*ycrel*ycrel
 				
-				mc40 += currentPixel[i]*xcrel*xcrel*xcrel*xcrel
-				mc04 += currentPixel[i]*ycrel*ycrel*ycrel*ycrel
-				mc31 += currentPixel[i]*xcrel*xcrel*xcrel*ycrel
-				mc13 += currentPixel[i]*xcrel*ycrel*ycrel*ycrel
+			#	mc40 += currentPixel[i]*xcrel*xcrel*xcrel*xcrel
+			#	mc04 += currentPixel[i]*ycrel*ycrel*ycrel*ycrel
+			#	mc31 += currentPixel[i]*xcrel*xcrel*xcrel*ycrel
+			#	mc13 += currentPixel[i]*xcrel*ycrel*ycrel*ycrel
 
 			
-			for i in range(rect.width*rect.height) :
-				mm20 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)
-				mm02 += currentPixel[i]*(yCoord[i]-ym)*(yCoord[i]-ym)
-				mm11 += currentPixel[i]*(xCoord[i]-xm)*(yCoord[i]-ym)
+			#for i in range(rect.width*rect.height) :
+			#	mm20 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)
+			#	mm02 += currentPixel[i]*(yCoord[i]-ym)*(yCoord[i]-ym)
+			#	mm11 += currentPixel[i]*(xCoord[i]-xm)*(yCoord[i]-ym)
 
-				mm30 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)
-				mm03 += currentPixel[i]*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)
-				mm21 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(yCoord[i]-ym)
-				mm12 += currentPixel[i]*(xCoord[i]-xm)*(yCoord[i]-ym)*(yCoord[i]-ym)
+			#	mm30 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)
+			#	mm03 += currentPixel[i]*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)
+			#	mm21 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(yCoord[i]-ym)
+			#	mm12 += currentPixel[i]*(xCoord[i]-xm)*(yCoord[i]-ym)*(yCoord[i]-ym)
 
-				mm40 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)
-				mm04 += currentPixel[i]*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)
-				mm31 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)*(yCoord[i]-ym)
-				mm13 += currentPixel[i]*(xCoord[i]-xm)*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)
+			#	mm40 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)
+			#	mm04 += currentPixel[i]*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)
+			#	mm31 += currentPixel[i]*(xCoord[i]-xm)*(xCoord[i]-xm)*(xCoord[i]-xm)*(yCoord[i]-ym)
+			#	mm13 += currentPixel[i]*(xCoord[i]-xm)*(yCoord[i]-ym)*(yCoord[i]-ym)*(yCoord[i]-ym)
 
 			
 			
-			xxcVar = mc20/m00
-			yycVar = mc02/m00
-			xycVar = mc11/m00
+			#xxcVar = mc20/m00
+			#yycVar = mc02/m00
+			#xycVar = mc11/m00
 
-			xcSkew = mc30/(m00 * math.pow(xxcVar,(3.0/2.0)))
-			ycSkew = mc03/(m00 * math.pow(yycVar,(3.0/2.0)))
+			#xcSkew = mc30/(m00 * math.pow(xxcVar,(3.0/2.0)))
+			#ycSkew = mc03/(m00 * math.pow(yycVar,(3.0/2.0)))
 
-			xcKurt = mc40 / (m00 * math.pow(xxcVar,2.0)) - 3.0
-			ycKurt = mc04 / (m00 * math.pow(yycVar,2.0)) - 3.0
+			#xcKurt = mc40 / (m00 * math.pow(xxcVar,2.0)) - 3.0
+			#ycKurt = mc04 / (m00 * math.pow(yycVar,2.0)) - 3.0
 
-			ecc = (math.pow((mc20-mc02),2.0)+(4.0*mc11*mc11))/m00
+			#ecc = (math.pow((mc20-mc02),2.0)+(4.0*mc11*mc11))/m00
 			
-			xxmVar = mm20/m00
-			yymVar = mm02/m00
-			xymVar = mm11/m00
+			#xxmVar = mm20/m00
+			#yymVar = mm02/m00
+			#xymVar = mm11/m00
 
-			xmSkew = mm30/(m00 * math.pow(xxmVar,(3.0/2.0)))
-			ymSkew = mm03/(m00 * math.pow(yymVar,(3.0/2.0)))
+			#xmSkew = mm30/(m00 * math.pow(xxmVar,(3.0/2.0)))
+			#ymSkew = mm03/(m00 * math.pow(yymVar,(3.0/2.0)))
 
-			xmKurt = mm40 / (m00 * math.pow(xxmVar,2.0)) - 3.0
-			ymKurt = mm04 / (m00 * math.pow(yymVar,2.0)) - 3.0
+			#xmKurt = mm40 / (m00 * math.pow(xxmVar,2.0)) - 3.0
+			#ymKurt = mm04 / (m00 * math.pow(yymVar,2.0)) - 3.0
 
-			ecm = (math.pow((mm20-mm02),2.0)+(4.0*mm11*mm11))/m00
+			#ecm = (math.pow((mm20-mm02),2.0)+(4.0*mm11*mm11))/m00
 
-			rt.addValue("xxcVar", xxcVar)
-			rt.addValue("yycVar", yycVar)
-			rt.addValue("xycVar", xycVar)
+			#rt.addValue("xxcVar", xxcVar)
+			#rt.addValue("yycVar", yycVar)
+			#rt.addValue("xycVar", xycVar)
 
-			rt.addValue("xcSkew", xcSkew)
-			rt.addValue("ycSkew", ycSkew)
+			#rt.addValue("xcSkew", xcSkew)
+			#rt.addValue("ycSkew", ycSkew)
 
-			rt.addValue("xcKurt", xcKurt)
-			rt.addValue("ycKurt", ycKurt)
+			#rt.addValue("xcKurt", xcKurt)
+			#rt.addValue("ycKurt", ycKurt)
 
-			rt.addValue("Ecc", ecc)
+			#rt.addValue("Ecc", ecc)
 
-			rt.addValue("xxmVar", xxmVar)
-			rt.addValue("yymVar", yymVar)
-			rt.addValue("xymVar", xymVar)
+			#rt.addValue("xxmVar", xxmVar)
+			#rt.addValue("yymVar", yymVar)
+			#rt.addValue("xymVar", xymVar)
 
-			rt.addValue("xmSkew", xmSkew)
-			rt.addValue("ymSkew", ymSkew)
+			#rt.addValue("xmSkew", xmSkew)
+			#rt.addValue("ymSkew", ymSkew)
 
-			rt.addValue("xmKurt", xmKurt)
-			rt.addValue("ymKurt", ymKurt)
+			#rt.addValue("xmKurt", xmKurt)
+			#rt.addValue("ymKurt", ymKurt)
 
-			rt.addValue("Ecm", ecm)
+			#rt.addValue("Ecm", ecm)
 
 			rt.addValue("roiw", rect.width)
 			rt.addValue("roih", rect.height)
