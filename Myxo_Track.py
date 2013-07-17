@@ -3,6 +3,7 @@ from ij import ImageStack, ImagePlus, WindowManager, IJ
 from ij.gui import Roi, NonBlockingGenericDialog, Overlay
 from ij.plugin.frame import RoiManager
 from ij.plugin import RGBStackMerge
+from ij.gui import EllipseRoi
 
 from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, Font, Rectangle, Polygon
 from java.lang import Double,Boolean,Float
@@ -100,14 +101,16 @@ imp.setOverlay(overlay)
 gd0=NonBlockingGenericDialog("settings")
 gd0.addCheckbox("Show the overlay during the process ? (slow option)", False)
 gd0.addNumericField("Minimal Lifetime  : ",10,0)
-gd0.addNumericField("Minimal distance to reversion  : ",2,0)
+gd0.addNumericField("Minimal distance to reversion  : ",4,0)
 gd0.addNumericField("Sub sampling ?  : ",1,0)
+gd0.addNumericField("Radius for fluo tracking ?  : ",8,0)
 gd0.showDialog()
 
 isShow = gd0.getNextBoolean()
 minLife = gd0.getNextNumber()
 mind = gd0.getNextNumber()
 subs = gd0.getNextNumber()
+rayon = gd0.getNextNumber()
 
 if gd0.wasCanceled() : 
 	isShow = True
@@ -116,7 +119,7 @@ else :
 	if  isShow : imp.show()
 	else : imp.hide()
 
-dicSens, dicSpeed, dicAngle, dicCumuld, dicPos ={},{},{}, {}, {}
+dicSens, dicSpeed, dicAngle, dicCumuld, dicPos, dicFluoA, dicFluoB ={},{},{},{},{},{},{}
 dicSpeedA, dicSpeedB, dicSpeedC, dicMidAxis, dicFeret = {},{},{},{},{}
 
 
@@ -180,7 +183,7 @@ for cle in listcellname :
 	g=colorA.getGreen()
 	b=colorA.getBlue()
 
-	reversions, speed, angles, cumuld, pos = [sensA],[0],[0], [0], []
+	reversions, speed, angles, cumuld, pos, fluoA, fluoB = [sensA],[0],[0], [0], [], [], []
 	speedA, speedB, speedC = [0],[0], [(0,0)]
 	midaxislength = []
 	Feret = []
@@ -194,7 +197,8 @@ for cle in listcellname :
 	
 	imp.setSlice(i0)
 	t=Morph(imp, roisArray[0])
-	try : polygon=t.MidAxis.getPolygon()
+	midline = t.MidAxis
+	try : polygon=midline.getFloatPolygon()
 	except AttributeError : 
 		print "break at", cle, i
 		break
@@ -227,7 +231,8 @@ for cle in listcellname :
 		#except AttributeError : 
 		#	print "break"
 		#	break
-		try : polygon=t.MidAxis.getPolygon()
+		midline=t.MidAxis
+		try : polygon=midline.getFloatPolygon()
 		except AttributeError : 
 			print "break at", cle, i
 			break
@@ -285,6 +290,34 @@ for cle in listcellname :
 		xc1=centres[i][0]
 		yc1=centres[i][1]
 
+		# -------- fluo poles --------------
+		
+		polAx0 = xa0 - rayon
+		polAx1 = xa0 + rayon
+		polAy0 = ya0 - rayon
+		polAy1 = ya0 + rayon
+
+		polBx0 = xb0 - rayon
+		polBx1 = xb0 + rayon
+		polBy0 = yb0 - rayon
+		polBy1 = yb0 + rayon
+
+		polA = EllipseRoi(polAx0, polAy0, polAx1, polAy1, 1)
+		polB = EllipseRoi(polBx0, polBy0, polBx1, polBy1, 1)
+
+		imp.setRoi(polA)
+		ipA = imp.getProcessor()
+		isA = ipA.getStatistics()
+
+		imp.setRoi(polB)
+		ipB = imp.getProcessor()
+		isB = ipB.getStatistics()
+		
+		fluoA.append(isA.max)
+		fluoB.append(isB.max)
+
+		# -------- end fluo poles --------------
+
 		# ------------ coordonées old centre -----------
 		#norme vecteur oldC to newA ATTENTION COORDONNEES IMAGE INVERSEES
 		#vA1=(xa1-xc0, yc0-ya1)
@@ -317,9 +350,11 @@ for cle in listcellname :
 				
 				#sens.append("A")
 				reversions.append(sensA)
+
 			else : 
 				#sens.append("B")
 				reversions.append(sensB)
+				if i==1 : reversions[0] = sensB
 		else : 
 			if reversions[-1]==sensA : reversions.append(sensA)
 			else : reversions.append(sensB)
@@ -352,6 +387,32 @@ for cle in listcellname :
 
 	speedA.append(0)
 	speedB.append(0)
+	#------- dernier point de la fluo
+	polAx0 = xa1 - rayon
+	polAx1 = xa1 + rayon
+	polAy0 = ya1 - rayon
+	polAy1 = ya1 + rayon
+
+	polBx0 = xb1 - rayon
+	polBx1 = xb1 + rayon
+	polBy0 = yb1 - rayon
+	polBy1 = yb1 + rayon
+
+	polA = EllipseRoi(polAx0, polAy0, polAx1, polAy1, 1)
+	polB = EllipseRoi(polBx0, polBy0, polBx1, polBy1, 1)
+
+	imp.setRoi(polA)
+	ipA = imp.getProcessor()
+	isA = ipA.getStatistics()
+
+	imp.setRoi(polB)
+	ipB = imp.getProcessor()
+	isB = ipB.getStatistics()
+		
+	fluoA.append(isA.max)
+	fluoB.append(isB.max)
+
+	# ----- fin dernier point de la fluo
 
 	for i in range(2,len(pointsA)) :
 		speedA.append((pointsA[i-1][0]-pointsA[i-2][0])*(pointsA[i][0]-pointsA[i-1][0])+(pointsA[i-2][1]-pointsA[i-1][1])*(pointsA[i-1][1]-pointsA[i][1])) #scalaire a0a1Xa1a2
@@ -367,8 +428,10 @@ for cle in listcellname :
 	#dicAngle[cle]=angles
 	dicCumuld[cle]=cumuld
 	dicPos[cle]=pos
+	dicFluoA[cle]=fluoA
+	dicFluoB[cle]=fluoB
 	
-	if i > maxx : maxx = i
+	if i > maxx : maxx = i+1
 	if max(speed) > maxspeed : maxspeed = max(speed)
 	if max(cumuld) > maxcumuld : maxcumuld = max(cumuld)
 	tab="\t"
@@ -387,6 +450,8 @@ for cle in listcellname :
 	#del(angles)
 	del(cumuld)
 	del(pos)
+	del(fluoA)
+	del(fluoB)
 	#print dicPos[cle][0][0]
 
 IJ.log("-------end-------")
@@ -399,8 +464,9 @@ f1.close()
 #rgbstack = temprgb.createEmptyStack()
 #temprgb.hide()
 
+
 for cle in cles :
-	reversions, speed, speedA, speedB, speedC, cumuld = dicSens[cle], dicSpeed[cle], dicSpeedA[cle], dicSpeedB[cle], dicSpeedC[cle], dicCumuld[cle]
+	reversions, speed, speedA, speedB, speedC, cumuld, fluoA, fluoB = dicSens[cle], dicSpeed[cle], dicSpeedA[cle], dicSpeedB[cle], dicSpeedC[cle], dicCumuld[cle], dicFluoA[cle], dicFluoB[cle]
 	midaxislength = dicMidAxis[cle]
 	Feret = dicFeret[cle]
 	for i in range(maxx-len(reversions)) : 
@@ -412,10 +478,11 @@ for cle in cles :
 		midaxislength.append(Double.NaN)
 		Feret.append(Double.NaN)
 		cumuld.append(Double.NaN)
-		
+		fluoA.append(Double.NaN)
+		fluoB.append(Double.NaN)
 	
-	plot1=Plot("Reversions-"+cle,"frames","",range(maxx),reversions)
-	plot1.setLimits(1,maxx,-1.1,1.1)
+	plot1=Plot("Reversions-"+cle,"frames","",range(1,maxx+1),reversions)
+	plot1.setLimits(0,maxx+1,-1.1,1.1)
 	#plot1.show()
 
 	ip1=plot1.getProcessor()
@@ -425,8 +492,8 @@ for cle in cles :
 	istack=ImageStack(ip1.getWidth(), ip1.getHeight())
 	istack.addSlice("reversions", ip1)
 	
-	plot2=Plot("Speed-"+cle,"","",range(maxx),speed)
-	plot2.setLimits(1,maxx,0,maxspeed*1.1)
+	plot2=Plot("Speed-"+cle,"","",range(1,maxx+1),speed)
+	plot2.setLimits(0,maxx+1,0,maxspeed*1.1)
 	ip2=plot2.getProcessor()
 	ip2.invert()
 	implot2=ImagePlus("plot2", ip2)
@@ -434,8 +501,8 @@ for cle in cles :
 	#plot2.show()
 	istack.addSlice("speed", ip2)
 	
-	plot3=Plot("CumulDist-"+cle,"","",range(maxx),cumuld)
-	plot3.setLimits(1,maxx,0,maxcumuld*1.1)
+	plot3=Plot("CumulDist-"+cle,"","",range(1,maxx+1),cumuld)
+	plot3.setLimits(0,maxx+1,0,maxcumuld*1.1)
 	ip3=plot3.getProcessor()
 	ip3.invert()
 	implot3=ImagePlus("plot3", ip3)
@@ -496,18 +563,18 @@ f4 = open(rootdir+now+"-R4-MT.txt", "w")
 
 tab="\t"
 
-line2 = ["sens"+cle+tab+"speed"+cle+tab+"cumul"+cle for cle in cles]
+line2 = ["sens"+cle+tab+"speed"+cle+tab+"cumul"+cle+tab+"fluoA"+cle+tab+"fluoB"+cle for cle in cles]
 line3 = ["scalA"+cle+tab+"scalB"+cle+tab+"oriX"+cle+tab+"oriY"+cle for cle in cles]
-line4 = ["midaxis"+cle+tab+"Feret"+cle for cle in cles]
+line4 = ["midaxis"+cle+tab+"Feret"+cle+tab+"fluoA"+cle+tab+"fluoB"+cle for cle in cles]
 
 f2.write(tab.join(line2)+"\n")
 f3.write(tab.join(line3)+"\n")
 f4.write(tab.join(line4)+"\n")
 
 for i in range(maxx) :
-	line2 = [str(dicSens[cle][i])+tab+str(dicSpeed[cle][i])+tab+str(dicCumuld[cle][i]) for cle in cles]
+	line2 = [str(dicSens[cle][i])+tab+str(dicSpeed[cle][i])+tab+str(dicCumuld[cle][i])+tab+str(dicFluoA[cle][i])+tab+str(dicFluoB[cle][i]) for cle in cles]
 	line3 = [str(dicSpeedA[cle][i])+tab+str(dicSpeedB[cle][i])+tab+str(dicSpeedC[cle][i][0])+tab+str(dicSpeedC[cle][i][1]) for cle in cles]
-	line4 = [str(dicMidAxis[cle][i])+tab+str(dicFeret[cle][i]) for cle in cles]
+	line4 = [str(dicMidAxis[cle][i])+tab+str(dicFeret[cle][i])+tab+str(dicFluoA[cle][i])+tab+str(dicFluoB[cle][i]) for cle in cles]
 	f2 .write(tab.join(line2)+"\n")
 	f3 .write(tab.join(line3)+"\n")
 	f4.write(tab.join(line4)+"\n")
