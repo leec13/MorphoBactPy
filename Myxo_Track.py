@@ -3,7 +3,7 @@ from ij import ImageStack, ImagePlus, WindowManager, IJ
 from ij.gui import Roi, NonBlockingGenericDialog, Overlay
 from ij.plugin.frame import RoiManager
 from ij.plugin import RGBStackMerge
-from ij.gui import EllipseRoi
+from ij.gui import EllipseRoi, Line
 
 from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, Font, Rectangle, Polygon
 from java.lang import Double,Boolean,Float
@@ -190,6 +190,8 @@ for cle in listcellname :
 
 	pointsA={}
 	pointsB={}
+	pointsC={}
+	pointsD={}
 	centres={}
 
 	i0 = roisArray[0].getPosition()
@@ -220,6 +222,8 @@ for cle in listcellname :
 
 	pointsA[0]=(xpoints[0], ypoints[0])
 	pointsB[0]=(xpoints[-1], ypoints[-1])
+	pointsC[0]=(xpoints[1], ypoints[1])
+	pointsD[0] = (xpoints[-2], ypoints[-2])
 	
 	for i in range(1, len(roisArray), 1) :
 		IJ.showProgress(i, len(roisArray)) 
@@ -269,9 +273,13 @@ for cle in listcellname :
 		if d1<=d2 :
 			pointsA[i]=(xpoints[0], ypoints[0]) # new A is the closest from old A
 			pointsB[i]=(xpoints[-1], ypoints[-1])
+			pointsC[i]=(xpoints[1], ypoints[1])
+			pointsD[i]=(xpoints[-2], ypoints[-2])
 		else : 
 			pointsB[i]=(xpoints[0], ypoints[0])
 			pointsA[i]=(xpoints[-1], ypoints[-1]) # new A is the closest from old A
+			pointsC[i]=(xpoints[-2], ypoints[-2])
+			pointsD[i]=(xpoints[1], ypoints[1])
 
 		# ------- coordonées image ------------
 		xa0=pointsA[i-1][0]
@@ -290,26 +298,32 @@ for cle in listcellname :
 		xc1=centres[i][0]
 		yc1=centres[i][1]
 
+
+		# -------- fluo poles par l'axe ---
+		
+		
 		# -------- fluo poles --------------
 		
-		polAx0 = xa0 - rayon
-		polAx1 = xa0 + rayon
-		polAy0 = ya0 - rayon
-		polAy1 = ya0 + rayon
+		polAx0 = xa1 - rayon
+		polAx1 = xa1 + rayon
+		polAy0 = ya1 - rayon
+		polAy1 = ya1 + rayon
 
-		polBx0 = xb0 - rayon
-		polBx1 = xb0 + rayon
-		polBy0 = yb0 - rayon
-		polBy1 = yb0 + rayon
+		polBx0 = xb1 - rayon
+		polBx1 = xb1 + rayon
+		polBy0 = yb1 - rayon
+		polBy1 = yb1 + rayon
 
 		polA = EllipseRoi(polAx0, polAy0, polAx1, polAy1, 1)
 		polB = EllipseRoi(polBx0, polBy0, polBx1, polBy1, 1)
 
 		imp.setRoi(polA)
+		#overlay.add(polA)
 		ipA = imp.getProcessor()
 		isA = ipA.getStatistics()
 
 		imp.setRoi(polB)
+		#overlay.add(polB)
 		ipB = imp.getProcessor()
 		isB = ipB.getStatistics()
 		
@@ -319,25 +333,8 @@ for cle in listcellname :
 		# -------- end fluo poles --------------
 
 		# ------------ coordonées old centre -----------
-		#norme vecteur oldC to newA ATTENTION COORDONNEES IMAGE INVERSEES
-		#vA1=(xa1-xc0, yc0-ya1)
-		#vA0=(xa0-xc0, yc0-ya0)
-		#vB1=(xb1-xc0, yc0-yb1)
-		#vB0=(xb0-xc0, yc0-yb0)
+
 		vC1=(xc1-xc0, yc0-yc1)
-		#vA0A1=(xa1-xa0, ya0-ya1)
-		#vB0B1=(xb1-xb0, yb0-yb1)
-		#A0xA0A1=(vA0[0]*vA0A1[0]+vA0[1]*vA0A1[1])
-		#B0xB0B1=(vB0[0]*vB0B1[0]+vB0[1]*vB0B1[1])
-
-		#da=Morph.distMorph([(1, xa1, xc0),(1, ya1, yc0)]) #from old center to new A
-		#db=Morph.distMorph([(1, xb1, xc0),(1, yb1, yc0)]) #from old center to new B
-		#dc=Morph.distMorph([(1, xc1, xc0),(1, yc1, yc0)]) #from old center to new Center
-		#daa=Morph.distMorph([(1, xa1, xa0),(1, ya1, ya0)]) #from old A to new A
-		#dbb=Morph.distMorph([(1, xb1, xb0),(1, yb1, yb0)]) #from old A to new A
-
-		#speedA.append(A0xA0A1)
-		#speedB.append(B0xB0B1)
 		speedC.append(vC1)
 
 		#methode centres :
@@ -387,30 +384,37 @@ for cle in listcellname :
 
 	speedA.append(0)
 	speedB.append(0)
-	#------- dernier point de la fluo
-	polAx0 = xa1 - rayon
-	polAx1 = xa1 + rayon
-	polAy0 = ya1 - rayon
-	polAy1 = ya1 + rayon
+	
+	#------- premier point de la fluo
+	
+	polAx0 = pointsA[0][0] -rayon
+	polAx1 = pointsA[0][0] + rayon
+	polAy0 = pointsA[0][1] - rayon
+	polAy1 = pointsA[0][1] + rayon
 
-	polBx0 = xb1 - rayon
-	polBx1 = xb1 + rayon
-	polBy0 = yb1 - rayon
-	polBy1 = yb1 + rayon
+	polBx0 = pointsB[0][0] - rayon
+	polBx1 = pointsB[0][0] + rayon
+	polBy0 = pointsB[0][1] - rayon
+	polBy1 = pointsB[0][1] + rayon
 
 	polA = EllipseRoi(polAx0, polAy0, polAx1, polAy1, 1)
 	polB = EllipseRoi(polBx0, polBy0, polBx1, polBy1, 1)
 
+	imp.setSlice(i0)
+	
 	imp.setRoi(polA)
+	overlay.add(polA)
 	ipA = imp.getProcessor()
 	isA = ipA.getStatistics()
 
+	imp.setSlice(i0)
 	imp.setRoi(polB)
+	overlay.add(polB)
 	ipB = imp.getProcessor()
 	isB = ipB.getStatistics()
 		
-	fluoA.append(isA.max)
-	fluoB.append(isB.max)
+	fluoA.insert(0,isA.max)
+	fluoB.insert(0,isB.max)
 
 	# ----- fin dernier point de la fluo
 
