@@ -429,7 +429,6 @@ for cle in listcellname :
 	dicSpeedC[cle]=speedC
 	dicMidAxis[cle]=midaxislength
 	dicFeret[cle] = Feret
-	#dicAngle[cle]=angles
 	dicCumuld[cle]=cumuld
 	dicPos[cle]=pos
 	dicFluoA[cle]=fluoA
@@ -451,22 +450,16 @@ for cle in listcellname :
 	del(speedC)
 	del(midaxislength)
 	del(Feret)
-	#del(angles)
 	del(cumuld)
 	del(pos)
 	del(fluoA)
 	del(fluoB)
-	#print dicPos[cle][0][0]
 
 IJ.log("-------end-------")
 
 IJ.log(str(len(cles))+" cells")
 
 f1.close()
-
-#temprgb = IJ.createImage("Untitled", "RGB Black", 578, 555, 1)
-#rgbstack = temprgb.createEmptyStack()
-#temprgb.hide()
 
 
 for cle in cles :
@@ -485,69 +478,56 @@ for cle in cles :
 		fluoA.append(Double.NaN)
 		fluoB.append(Double.NaN)
 	
-	plot1=Plot("Reversions-"+cle,"frames","",range(1,maxx+1),reversions)
-	plot1.setLimits(0,maxx+1,-1.1,1.1)
-	#plot1.show()
-
-	ip1=plot1.getProcessor()
-	ip1.invert()
-	implot1=ImagePlus("plot1", ip1)
-	#implot1.show()
-	istack=ImageStack(ip1.getWidth(), ip1.getHeight())
-	istack.addSlice("reversions", ip1)
-	
-	plot2=Plot("Speed-"+cle,"","",range(1,maxx+1),speed)
-	plot2.setLimits(0,maxx+1,0,maxspeed*1.1)
-	ip2=plot2.getProcessor()
-	ip2.invert()
-	implot2=ImagePlus("plot2", ip2)
-	#implot2.show()
-	#plot2.show()
-	istack.addSlice("speed", ip2)
-	
-	plot3=Plot("CumulDist-"+cle,"","",range(1,maxx+1),cumuld)
-	plot3.setLimits(0,maxx+1,0,maxcumuld*1.1)
-	ip3=plot3.getProcessor()
-	ip3.invert()
-	implot3=ImagePlus("plot3", ip3)
-	#implot3.show()
-	#plot3.show()
-	istack.addSlice("cumul", ip3)
-	imstack=ImagePlus("stack3", istack)
-	
-	#IJ.run("Images to Stack", "name="+cle+"-plots title="+cle+" use")
-	imstack.show()
-	IJ.selectWindow("stack3")
-	#imtorgb=[implot1,implot2,implot3]
-	#rgbcon=RGBStackMerge()
-	#IJ.run("Merge Channels...", "red="+implot1.getTitle()+" green="+implot2.getTitle()+" blue="+implot3.getTitle()+" gray=*None*");
-	#lastimage=IJ.getImage()
-	
-	#lastimage = rgbcon.mergeChannels(imtorgb, True) 
-	#lastimage.show()
-	#IJ.run("Invert", "stack")
-	IJ.run("Stack to RGB", "")
-	lastimage=IJ.getImage()
-	imstack.close()
-	#cp = lastimage.getProcessor().convertToRGB()
-	cp = lastimage.getProcessor()
-	try : rgbstack.addSlice(cle, cp)
-	except NameError : 
-		rgbstack = lastimage.createEmptyStack()
-		rgbstack.addSlice(cle, cp)
-	lastimage.close()
-	#IJ.selectWindow(cle+"-plots")
-	#IJ.getImage().hide()
+#	plot1=Plot("Reversions-"+cle,"frames","",range(1,maxx+1),reversions)
+#	plot1.setLimits(0,maxx+1,-1.1,1.1)
+#
+#	ip1=plot1.getProcessor()
+#	ip1.invert()
+#	implot1=ImagePlus("plot1", ip1)
+#
+#	istack=ImageStack(ip1.getWidth(), ip1.getHeight())
+#	istack.addSlice("reversions", ip1)
+#	
+#	plot2=Plot("Speed-"+cle,"","",range(1,maxx+1),speed)
+#	plot2.setLimits(0,maxx+1,0,maxspeed*1.1)
+#	ip2=plot2.getProcessor()
+#	ip2.invert()
+#	implot2=ImagePlus("plot2", ip2)
+#
+#	istack.addSlice("speed", ip2)
+#	
+#	plot3=Plot("CumulDist-"+cle,"","",range(1,maxx+1),cumuld)
+#	plot3.setLimits(0,maxx+1,0,maxcumuld*1.1)
+#	ip3=plot3.getProcessor()
+#	ip3.invert()
+#	implot3=ImagePlus("plot3", ip3)
+#
+#	istack.addSlice("cumul", ip3)
+#	imstack=ImagePlus("stack3", istack)
+#	
+#	imstack.show()
+#	IJ.selectWindow("stack3")
+#
+#	IJ.run("Stack to RGB", "")
+#	lastimage=IJ.getImage()
+#	imstack.close()
+#
+#	cp = lastimage.getProcessor()
+#	try : rgbstack.addSlice(cle, cp)
+#	except NameError : 
+#		rgbstack = lastimage.createEmptyStack()
+#		rgbstack.addSlice(cle, cp)
+#	lastimage.close()
 	
 	del(reversions)
 	del(speed)
 	del(cumuld)
 
-imprgb=ImagePlus("rgbStack", rgbstack)
-imprgb.show()
-IJ.selectWindow("rgbStack")
-IJ.run("Hide Overlay", "")
-#IJ.run("Images to Stack", "name=RGB-plots title=(RGB) use")
+#imprgb=ImagePlus("rgbStack", rgbstack)
+#imprgb.show()
+#IJ.selectWindow("rgbStack")
+#IJ.run("Hide Overlay", "")
+
 
 imp.show()
 IJ.selectWindow(imp.getTitle())
@@ -590,7 +570,6 @@ f4.close()
 
 dictRois.clear()
 for r in listrois :
-	#cle=r.rsplit("/", 1)[1][:-len(".zip")]
 	cle=os.path.splitext(os.path.split(r)[1])[0]
 	if cle in cles : dictRois[cle]=r
 
@@ -601,8 +580,7 @@ gw.show()
 gw.setSelected(dictRois.keys())
 while not gw.oked and gw.isShowing() :
 	pass 
-	#gw.setLabel("Validate selection with OK !!")
-	#listcellname = list(gw.getSelected())
+
 gw.resetok()
 gw.setLabel("...")
 gw.hide()
