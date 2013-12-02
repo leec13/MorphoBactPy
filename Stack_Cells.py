@@ -64,6 +64,7 @@ class StackCells(swing.JFrame):
 		self.__conEllipses = False
 
 		self.__dictCells = {}
+
 		
 		self.__rm = RoiManager.getInstance()
 		if (self.__rm==None): self.__rm = RoiManager()
@@ -470,6 +471,7 @@ class StackCells(swing.JFrame):
 		
 	def __dia(self, event): 
 		IJ.run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel")
+		IJ.run("Set Measurements...", "area mean standard modal min centroid shape integrated median skewness kurtosis stack limit display redirect=None decimal=3")
 		#IJ.run("Properties...", "channels=1 slices=1 frames=20 unit=pixel pixel_width=1.0000 pixel_height=1.0000 voxel_depth=1.0000 frame=[1 sec] origin=0,0");
 		self.__impD = IJ.getImage()
 		self.__isD = self.__impD.getImageStack()
@@ -478,6 +480,7 @@ class StackCells(swing.JFrame):
 
 	def __fluo(self, event): 
 		IJ.run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel")
+		IJ.run("Set Measurements...", "area mean standard modal min centroid shape integrated median skewness kurtosis stack limit display redirect=None decimal=3")
 		self.__impF = IJ.getImage()
 		self.__isF = self.__impF.getImageStack()
 		self.__display.text = "FLUO="+self.__impF.getTitle()
