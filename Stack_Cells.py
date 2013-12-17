@@ -452,7 +452,6 @@ class StackCells(swing.JFrame):
 		self.__sens = [1 for i in range(len(self.__iplist)) ]
 		
 		if self.__appmedian : IJ.run(self.__impRes, "Median...", "radius=1 stack")
-		
 		if self.__align : self.__falign()
 		if self.__avg : self.__favg()
 		if self.__mosa : self.__fmosa()
@@ -461,6 +460,7 @@ class StackCells(swing.JFrame):
 		if self.__measures : self.__fmeasures()
 		
 		self.__sens[:] = []
+		
 		self.__listrois[:] = []
 		self.__iplist[:] = []
 		self.__cellsrois[:] = []
@@ -468,6 +468,7 @@ class StackCells(swing.JFrame):
 		self.__iph[:] = []
 
 		self.__init = False
+
 		
 	def __dia(self, event): 
 		IJ.run("Set Scale...", "distance=0 known=0 pixel=1 unit=pixel")
@@ -810,7 +811,6 @@ class StackCells(swing.JFrame):
 
 
 	def __falign(self) :
-		
 		#self.__impRes=IJ.getImage()
 		stack = self.__impRes.getStack() # get the stack within the ImagePlus
 		n_slices = stack.getSize() # get the number of slices
@@ -823,14 +823,14 @@ class StackCells(swing.JFrame):
 		
 		
 		for index in range(1, n_slices+1):	
-			
 			self.__impRes.setSlice(index)
 			ip1 = stack.getProcessor(index)
 			imp1 = ImagePlus("imp1-"+str(index), ip1)
 			imp1sqr = ic.run("Multiply create 32-bit", imp1, imp1)			
 
-			IJ.setThreshold(imp1sqr, 1, 4294836225)
-			IJ.run(imp1sqr, "Create Selection", "")
+			IJ.setThreshold(imp1sqr, 1, 4294967296)
+			#IJ.run(imp1sqr, "Create Selection", "")
+			IJ.run(imp1sqr, "Select All", "")
 			roi = imp1sqr.getRoi()
 			rect=roi.getBounds()
 			roi = Roi(rect)
