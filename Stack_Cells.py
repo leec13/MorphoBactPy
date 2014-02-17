@@ -826,20 +826,26 @@ class StackCells(swing.JFrame):
 			self.__impRes.setSlice(index)
 			ip1 = stack.getProcessor(index)
 			imp1 = ImagePlus("imp1-"+str(index), ip1)
-			imp1sqr = ic.run("Multiply create 32-bit", imp1, imp1)			
+			#imp1sqr = ic.run("Multiply create 32-bit", imp1, imp1)			
 
-			IJ.setThreshold(imp1sqr, 1, 4294967296)
+			#IJ.setThreshold(imp1sqr, 1, 4294967296)
 			#IJ.run(imp1sqr, "Create Selection", "")
-			IJ.run(imp1sqr, "Select All", "")
-			roi = imp1sqr.getRoi()
-			rect=roi.getBounds()
-			roi = Roi(rect)
-			self.__listrois.append(roi)
-			ipsqr = imp1sqr.getProcessor()
+			#IJ.run(imp1sqr, "Select All", "")
+			#roi = imp1sqr.getRoi()
+			#rect=roi.getBounds()
+			#roi = Roi(rect)
+
+			#self.__listrois.append(roi)
+			#ipsqr = imp1sqr.getProcessor()
+			#is1 = ipsqr.getStatistics()
+			#self.__impRes.killRoi()
+
+			IJ.run(imp1, "Select All", "")
+			roi = imp1.getRoi()
+			self.__listrois.append(roi)			
+			ipsqr = imp1.getProcessor()
 			is1 = ipsqr.getStatistics()
 			self.__impRes.killRoi()
-
-			
 			
 			if is1.xCenterOfMass > w/2.00 : 
 				self.__impRes.setRoi(roi)
