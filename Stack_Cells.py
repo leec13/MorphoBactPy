@@ -591,13 +591,13 @@ class StackCells(swing.JFrame):
 				maxmferet = float(self.__display21.text)
 				minmferet = float(self.__display22.text)
 
-				testsol = (minsol< m.Solidity < maxsol)
-				testarea = (minarea< m.Area < maxarea)
-				testcirc = (mincirc< m.Circ < maxcirc)
-				testar = (minar< m.AR < maxar)
-				testfer = (minfer< m.MaxFeret < maxfer)
-				testmean = (minmean < m.Mean < maxmean)
-				testmferet = (minmferet < m.MinFeret < maxmferet)
+				testsol = (minsol<= m.Solidity <= maxsol)
+				testarea = (minarea<= m.Area <= maxarea)
+				testcirc = (mincirc<= m.Circ <= maxcirc)
+				testar = (minar<= m.AR <= maxar)
+				testfer = (minfer<= m.MaxFeret <= maxfer)
+				testmean = (minmean <= m.Mean <= maxmean)
+				testmferet = (minmferet <= m.MinFeret <= maxmferet)
 				
 				#print minmferet , m.MinFeret , maxmferet
 
