@@ -646,10 +646,12 @@ class Morph(object):
 		angles=[angle*(math.pi/180)+(math.pi/2) for angle in angles]
 		line1.setWidth((ls2+1)*2)
 		segsRoi=[]
+		linesRois=[]
+		cRois=[]
 		for i in range(len(angles)):
 			x=points[i][0]
 			y=points[i][1]
-			
+			cRois.append(PointRoi(x,y))
 			if tool==0:
 				line1.setWidth((ls2+1)*2)
 				x1=x+r*math.cos(angles[i])
@@ -658,6 +660,7 @@ class Morph(object):
 				y2=y+r*math.sin(angles[i])
 				#print(x, y, x1, y1, x2, y2)
 				tempLine=Line(x1,y1,x2,y2)
+				linesRois.append(tempLine)
 				tempLine.setWidth((ls2+1)*2)
 				#self.__image.setRoi(tempLine, True)
 				#time.sleep(0.3)
@@ -671,6 +674,7 @@ class Morph(object):
 				x2=x-r
 				y2=y+r
 				ellipse=EllipseRoi(x1, y1, x2, y2, 1)
+				linesRois.append(ellipse)
 				#print(x, y, x1, y1, x2, y2)
 				#self.__image.setRoi(ellipse, True)
 				shapePoly= ShapeRoi(ellipse)
@@ -691,6 +695,7 @@ class Morph(object):
 					#y2=yf
 				
 				tempLine=Line(x1,y1,x2,y2)
+				linesRois.append(tempLine)
 				tempLine.setWidth(r)
 				#self.__image.setRoi(tempLine, True)
 				#time.sleep(0.5)
@@ -702,7 +707,7 @@ class Morph(object):
 			interRoi=interShape.shapeToRoi()
 			segsRoi.append(interShape.shapeToRoi())
 		line1.setWidth(0)
-		return segsRoi
+		return (segsRoi, linesRois, cRois)
 
 	def selectInitRoi(self):
 		self.__image.killRoi()
@@ -903,6 +908,12 @@ class Morph(object):
 			MidAxis: Polyline ROI de l'axe median par skeletonize
 		"""
 		if(not self.__boolML): return self.__midline()
+
+	def getMidSegs(self, n, r, tool):
+		"""
+			Rois des segments 0 = rois , 1 = points, 2 = lines ou ellipses
+		"""
+		if(not self.__boolMS): return self.getMidSegments(n, r, tool)
 		
 	def getMidProfil(self):
 		"""
@@ -924,6 +935,7 @@ class Morph(object):
 
 	def getFlexAngle(self) :
 		return self.__flexAngle()
+
 
 #------ setteurs --------
 
@@ -1026,6 +1038,16 @@ if __name__ == "__main__":
 		m.setMidParams(20, 5)
 		midline=m.MidAxis
 		imp1.setRoi(midline)
+		#midline.drawPixels(imp1.getProcessor())
+		shape=0
+		segs=m.getMidSegments(20, 10, shape)
+		outtype=1
+		for seg in segs[outtype] :
+			time.sleep(0.1)
+			if outtype==1 and shape==0 : seg.setStrokeWidth(1)
+			#imp1.setRoi(seg)
+			#seg.drawPixels(imp1.getProcessor()) 
+		
 		#print m.Out()
 	else :
 		rm = RoiManager.getInstance()
