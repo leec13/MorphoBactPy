@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-15 -*-
+
 
 import javax.swing as swing
 import java.awt as awt
@@ -7,9 +7,14 @@ from javax.swing.border import EtchedBorder, TitledBorder
 from java.awt import Font
 
 from ij import ImageStack, ImagePlus, WindowManager, IJ
-from ij.gui import Roi, NonBlockingGenericDialog, Overlay
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi
 from ij.plugin.frame import RoiManager
-from ij.plugin.filter import MaximumFinder
+from ij.plugin.filter import MaximumFinder, Analyzer
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
+from ij.process import ShortProcessor, ByteProcessor
+from ij.measure import ResultsTable
+
 
 import sys
 import os
@@ -604,9 +609,8 @@ class StackCells(swing.JFrame):
 				test = (testsol+testarea+testcirc+testar+testfer+testmean+testmferet)/7	
 
 				if test : 				
-					
 					fmaj, ffmx, fa =[],[],[]
-					for r in m.getMidSegments(10, 40, 0) :
+					for r in m.getMidSegments(10, 40, 0)[0] :
 						if r == None : continue
 						m2=Morph(self.__impF, r)
 						fmaj.append(m2.Major)

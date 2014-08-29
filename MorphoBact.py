@@ -1,10 +1,19 @@
-# -*- coding: iso-8859-15 -*-
+
 
 from ij.measure import ResultsTable
 from ij.plugin.filter import Analyzer, ThresholdToSelection, MaximumFinder, BackgroundSubtracter
 from ij.gui import Line, ProfilePlot, PolygonRoi, Roi, EllipseRoi, ShapeRoi, Wand, PointRoi
 from ij.process import ByteProcessor, ImageProcessor
 from ij import IJ, ImagePlus
+
+from ij import ImageStack, ImagePlus, WindowManager, IJ
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi
+from ij.plugin.frame import RoiManager
+from ij.plugin.filter import MaximumFinder, Analyzer
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
+from ij.process import ShortProcessor, ByteProcessor
+from ij.measure import ResultsTable
 
 import math
 import time
@@ -652,7 +661,7 @@ class Morph(object):
 			x=points[i][0]
 			y=points[i][1]
 			cRois.append(PointRoi(x,y))
-			if tool==0:
+			if tool==0: # ligne perpendiculaire d'épaiseur  (ls2+1)*2
 				line1.setWidth((ls2+1)*2)
 				x1=x+r*math.cos(angles[i])
 				y1=y-r*math.sin(angles[i])
@@ -1037,15 +1046,15 @@ if __name__ == "__main__":
 		m=Morph(imp1, roi)
 		m.setMidParams(20, 5)
 		midline=m.MidAxis
-		imp1.setRoi(midline)
+		#imp1.setRoi(midline)
 		#midline.drawPixels(imp1.getProcessor())
-		shape=0
-		segs=m.getMidSegments(20, 10, shape)
+		shape=2
+		segs=m.getMidSegments(10, 40, shape)
 		outtype=1
 		for seg in segs[outtype] :
-			time.sleep(0.1)
+			time.sleep(0.5)
 			if outtype==1 and shape==0 : seg.setStrokeWidth(1)
-			#imp1.setRoi(seg)
+			imp1.setRoi(seg)
 			#seg.drawPixels(imp1.getProcessor()) 
 		
 		#print m.Out()

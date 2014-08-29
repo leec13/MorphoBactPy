@@ -11,6 +11,17 @@ from java.awt import Font
 
 from ij.plugin.frame import RoiManager
 
+
+from ij import ImageStack, ImagePlus, WindowManager, IJ
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi
+from ij.plugin.frame import RoiManager
+from ij.plugin.filter import MaximumFinder, Analyzer
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
+from ij.process import ShortProcessor, ByteProcessor
+from ij.measure import ResultsTable
+
+
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
