@@ -26,8 +26,8 @@ codecs.setDefaultEncoding('utf-8')
 
 class Morph(object):
 	"""
-		Fourni les mesures principales pour l'analyse des cellules bactériennes:
-		proprietés:
+		Fourni les mesures principales pour l'analyse des cellules bacteriennes:
+		proprietes:
 		1-MaxFeret
 		2-MinFeret
 		3-AngleFeret
@@ -61,7 +61,7 @@ class Morph(object):
 		31-ListPeaksFoci: liste des int max des foci
 		32-ListMeanFoci liste des int mean des foci
 		
-		toute les proprietés mettent a jour l'image cible par: object.propriete=imp
+		toute les proprietes mettent a jour l'image cible par: object.propriete=imp
 		
 		Methodes:
 		getFeretSegments(n segments)
@@ -69,7 +69,7 @@ class Morph(object):
 		selectInitRoi: active la ROI initiale
 		
 		Statics:
-		distMorph(liste de coordonées a mesurer= (coefficient, valeur initiale, valeur finale))
+		distMorph(liste de coordonees a mesurer= (coefficient, valeur initiale, valeur finale))
 		
 		setteurs:
 		setImage(ImagePlus)
@@ -77,7 +77,7 @@ class Morph(object):
 		setImageMidprofil(imagePlus) met a jours le profil avec imagePlus
 		setLineWidth(width) afecte la largeur de ligne pour le profil pour Fprofile et MidProfil defaut = 0
 		setshowFprof(True) affiche le graphique de profil Fprofil defaut = False
-		setMidParams(longueur mesurer l'angle de l'extremité en pixels defaut=10, coefficient pour prolonger et trouver l'intersection avec le contour defaut=1.3
+		setMidParams(longueur mesurer l'angle de l'extremite en pixels defaut=10, coefficient pour prolonger et trouver l'intersection avec le contour defaut=1.3
 		
 	"""
 
@@ -661,7 +661,7 @@ class Morph(object):
 			x=points[i][0]
 			y=points[i][1]
 			cRois.append(PointRoi(x,y))
-			if tool==0: # ligne perpendiculaire d'épaiseur  (ls2+1)*2
+			if tool==0: # ligne perpendiculaire d'epaiseur  (ls2+1)*2
 				line1.setWidth((ls2+1)*2)
 				x1=x+r*math.cos(angles[i])
 				y1=y-r*math.sin(angles[i])
