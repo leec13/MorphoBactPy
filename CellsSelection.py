@@ -1,4 +1,3 @@
-# -*- coding: iso-8859-15 -*-
 
 import javax.swing as swing
 import java.awt as awt
@@ -6,9 +5,16 @@ from javax.swing import BorderFactory
 from javax.swing.border import EtchedBorder, TitledBorder
 from java.awt import Font
 
+
+
+
 from ij import ImageStack, ImagePlus, WindowManager, IJ
-from ij.gui import Roi, NonBlockingGenericDialog, Overlay
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi
+from ij.process import ImageProcessor, ShortProcessor, ByteProcessor
 from ij.plugin.frame import RoiManager
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
+from ij.measure import ResultsTable
 
 import sys
 import os

@@ -1,12 +1,19 @@
-# -*- coding: iso-8859-15 -*-
+
 
 from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, Font, Rectangle, Frame, FileDialog
 
 from org.python.core import codecs
 codecs.setDefaultEncoding('utf-8')
 
-from ij.gui import Roi
+
+from ij import ImageStack, ImagePlus, WindowManager, IJ
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi
+from ij.process import ImageProcessor, ShortProcessor, ByteProcessor
 from ij.plugin.frame import RoiManager
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
+from ij.measure import ResultsTable
+
 
 class Bacteria_Cell(object) :
 	"""

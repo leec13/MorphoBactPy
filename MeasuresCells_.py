@@ -1,8 +1,11 @@
-# -*- coding: iso-8859-15 -*-
-from ij import ImageStack, ImagePlus, WindowManager
-from ij.gui import Roi, NonBlockingGenericDialog, Overlay
-from ij.process import ImageProcessor
+
+from ij import ImageStack, ImagePlus, WindowManager, IJ
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi
+from ij.process import ImageProcessor, ShortProcessor, ByteProcessor
 from ij.plugin.frame import RoiManager
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
+from ij.measure import ResultsTable
 
 from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, Font, Rectangle, Frame, FileDialog
 from java.lang import Double,Boolean,Float
@@ -402,7 +405,7 @@ class MeasuresCells(object) :
 						# we fill the rectangle with the value of the measure
 						ipr.setValue(self.__dictMeasures[dico[cellname]][self.__measures[i]][indicecolonne-1])
 						ipr.fill()
-				# we write the names and the n° of slices on the image with the maxvalue.
+				# we write the names and the n of slices on the image with the maxvalue.
 				ip.setValue(maxvalue)
 				ip.moveTo(x1,y1)
 				ip.drawString(self.__measures[i])

@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-15 -*-
+
 
 from ij import ImageStack, ImagePlus, IJ, WindowManager
 from ij.gui import Roi, NonBlockingGenericDialog
@@ -97,7 +97,7 @@ class Bacteria_Tracking(object) :
 		self.__maxthr=255
 		self.__minthr=0
 
-		# Option in order to create a symmetry for angles close to 0° and 180°.
+		# Option in order to create a symmetry for angles close to 0 and 180.
 		self.__optionAngle=False
 
 		# Option in order to save ROIs in a folder.
@@ -362,12 +362,12 @@ class Bacteria_Tracking(object) :
 
 	
 
-	# Returns the ROIs of a slice given (identified with its n°) in a stack
+	# Returns the ROIs of a slice given (identified with its n) in a stack
 	def __calRois(self, imp, indice) :									
 		"""
-		Returns the ROIs of a slice given (identified with its n°) in a stack
+		Returns the ROIs of a slice given (identified with its n) in a stack
 		"""
-		##imp=self.__dictImages[nameimages]							 		# IL FAUT RÉCUPÉRER L'IMAGE DU STACK !!!!!
+		##imp=self.__dictImages[nameimages]							 		# IL FAUT RCUPRER L'IMAGE DU STACK !!!!!
 		#if self.__batch : imp.hide()
 		#else : imp.show()
 		#imp.hide()
@@ -444,7 +444,7 @@ class Bacteria_Tracking(object) :
 	
 
 	def __setThreshold(self, imp, indice) :
-		#imp=self.__dictImages[nameimages]		 		# IL FAUT RÉCUPÉRER L'IMAGE DU STACK !!!!!
+		#imp=self.__dictImages[nameimages]		 		# IL FAUT RCUPRER L'IMAGE DU STACK !!!!!
 		imp.setSlice(indice)
 		ip=imp.getProcessor()
 		ip.setAutoThreshold(self.__thresMethod, False, ImageProcessor.RED_LUT)
@@ -775,7 +775,7 @@ class Bacteria_Tracking(object) :
 			fichier = open(self.__selectdir+self.__textfile,"r")
 			lignes=fichier.readlines()
 			self.__params=[]
-			for i in range(indiceinterest,len(lignes)):						# ATTENTION À CHANGER AVEC PARAM DE RANGEROI
+			for i in range(indiceinterest,len(lignes)):						# ATTENTION  CHANGER AVEC PARAM DE RANGEROI
 				params=lignes[i].split("=")
 				val=params[1].split("\n")
 				if params[0]=="SUBBACK" : self.__subback=bool(int(val[0]))

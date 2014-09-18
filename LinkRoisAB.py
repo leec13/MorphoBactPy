@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-15 -*-
+
 
 import sys
 import os
@@ -7,8 +7,14 @@ import os.path
 import getpass
 import math
 
-from ij import IJ
-from ij.gui import Roi
+
+from ij import ImageStack, ImagePlus, WindowManager, IJ
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi
+from ij.process import ImageProcessor, ShortProcessor, ByteProcessor
+from ij.plugin.frame import RoiManager
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
+from ij.measure import ResultsTable
 
 
 from java.lang import Double,Boolean

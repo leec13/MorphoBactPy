@@ -1,9 +1,14 @@
-# -*- coding: iso-8859-15 -*-
+
+
 from ij import ImageStack, ImagePlus, WindowManager, IJ
-from ij.gui import Roi, NonBlockingGenericDialog, Overlay
+from ij.gui import Roi, NonBlockingGenericDialog, Overlay, ImageRoi, Line, OvalRoi, PolygonRoi, ShapeRoi, TextRoi, EllipseRoi
+from ij.process import ImageProcessor, ShortProcessor, ByteProcessor
 from ij.plugin.frame import RoiManager
-from ij.plugin import RGBStackMerge
-from ij.gui import EllipseRoi, Line
+from ij.text import TextWindow
+from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator, RGBStackMerge
+from ij.measure import ResultsTable
+
+
 
 from java.awt import TextField, Panel, GridLayout, ComponentOrientation, Label, Checkbox, BorderLayout, Button, Color, Font, Rectangle, Polygon
 from java.lang import Double,Boolean,Float
@@ -281,7 +286,7 @@ for cle in listcellname :
 			pointsC[i]=(xpoints[-2], ypoints[-2])
 			pointsD[i]=(xpoints[1], ypoints[1])
 
-		# ------- coordonées image ------------
+		# ------- coordonees image ------------
 		xa0=pointsA[i-1][0]
 		xa1=pointsA[i][0]
 		ya0=pointsA[i-1][1]
@@ -332,7 +337,7 @@ for cle in listcellname :
 
 		# -------- end fluo poles --------------
 
-		# ------------ coordonées old centre -----------
+		# ------------ coordonees old centre -----------
 
 		vC1=(xc1-xc0, yc0-yc1)
 		speedC.append(vC1)
