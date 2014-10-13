@@ -437,15 +437,14 @@ class StackCells(swing.JFrame):
 			resizelist = [ ip.resize(maxw, maxh, True) for ip in self.__iplist ]
 			
 		else : 
-			resizelist = []
-			for ip in self.__iplist :
-				tempip = ShortProcessor(maxw, maxh)
-				tempip.copyBits(ip, 0, 0, Blitter.COPY)
-				resizelist.append(tempip)
+			resizelist = [ ip for ip in self.__iplist ]
+			#for ip in self.__iplist :
+			#	tempip = ShortProcessor(maxw, maxh)
+			#	tempip.copyBits(ip, 0, 0, Blitter.COPY)
+			#	resizelist.append(tempip)
 				
 		ims = ImageStack(maxw, maxh) 	
-		
-		
+
 		#for ip in resizelist : ims.addSlice("", ip)
 		for i in range(len(resizelist)) : 
 			ims.addSlice(self.__labels[i], resizelist[i])
