@@ -12,7 +12,7 @@ from ij.plugin.frame import RoiManager
 from ij.plugin.filter import MaximumFinder, Analyzer
 from ij.text import TextWindow
 from ij.plugin import Straightener, Duplicator, ZProjector, MontageMaker, ImageCalculator
-from ij.process import ShortProcessor, ByteProcessor
+from ij.process import ImageProcessor, ShortProcessor, ByteProcessor, Blitter
 from ij.measure import ResultsTable
 
 
@@ -429,6 +429,9 @@ class StackCells(swing.JFrame):
 		if len(self.__iplist)==0 : 
 			IJ.showMessage("", "Stack is empty")
 			return
+
+		self.__iplist.sort(key = lambda ip : ip.width)
+		
 		self.__ipw=[ ip.getWidth() for ip in self.__iplist ]
 		self.__iph=[ ip.getHeight() for ip in self.__iplist ]
 		maxw=max(self.__ipw)
@@ -437,12 +440,18 @@ class StackCells(swing.JFrame):
 			resizelist = [ ip.resize(maxw, maxh, True) for ip in self.__iplist ]
 			
 		else : 
-			resizelist = [ ip for ip in self.__iplist ]
-			#for ip in self.__iplist :
-			#	tempip = ShortProcessor(maxw, maxh)
-			#	tempip.copyBits(ip, 0, 0, Blitter.COPY)
-			#	resizelist.append(tempip)
-				
+			resizelist = []
+			print len(resizelist)
+			for ip in self.__iplist :
+				print ip
+				tempip = ShortProcessor(maxw, maxh)
+				print tempip, maxw, maxh, ip.width, ip.height
+				xloc = int(math.floor((maxw/2.00) - (ip.width/2.00)))
+				yloc = int(math.floor((maxh/2.00) - (ip.height/2.00)))
+				print xloc, yloc
+				tempip.copyBits(ip, xloc, yloc, Blitter.COPY)
+				resizelist.append(tempip)
+			print len(resizelist)
 		ims = ImageStack(maxw, maxh) 	
 
 		#for ip in resizelist : ims.addSlice("", ip)
@@ -649,9 +658,8 @@ class StackCells(swing.JFrame):
 			
 			straightener = Straightener()
 			new_ip = straightener.straighten(self.__impF, midroi, int(self.__widthl))
-			
 			if int(self.__display5.text) < new_ip.getWidth() < int(self.__display6.text) : 
-				self.__iplist.append(new_ip)
+				self.__iplist.append(new_ip.convertToShort(False))
 				self.__display.text = self.__name + " cell " + str(len(self.__iplist))
 				#print "add", roi.getName(), roi.getType()
 				self.__cellsrois.append((midroi, pos))
