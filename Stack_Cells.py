@@ -441,17 +441,12 @@ class StackCells(swing.JFrame):
 			
 		else : 
 			resizelist = []
-			print len(resizelist)
 			for ip in self.__iplist :
-				print ip
 				tempip = ShortProcessor(maxw, maxh)
-				print tempip, maxw, maxh, ip.width, ip.height
 				xloc = int(math.floor((maxw/2.00) - (ip.width/2.00)))
 				yloc = int(math.floor((maxh/2.00) - (ip.height/2.00)))
-				print xloc, yloc
 				tempip.copyBits(ip, xloc, yloc, Blitter.COPY)
 				resizelist.append(tempip)
-			print len(resizelist)
 		ims = ImageStack(maxw, maxh) 	
 
 		#for ip in resizelist : ims.addSlice("", ip)
@@ -763,6 +758,8 @@ class StackCells(swing.JFrame):
 			newimage.setRoi(roi[0])
 			#listip.append(straightener.straighten(newimage, roi[0], int(self.__widthl)))
 			listip.append(straightener.straighten(newimage, roi[0], maxh))
+
+		listip.sort(key = lambda ip : ip.width)
 		
 		ipw=[ ip.getWidth() for ip in listip ]
 		iph=[ ip.getHeight() for ip in listip ]
@@ -770,19 +767,14 @@ class StackCells(swing.JFrame):
 		maxh=max(iph)
 		
 		if self.__enlarge : resizelist = [ ip.resize(maxw, maxh, True) for ip in listip ]
-		
-		elif  self.__alignC : 
-			resizelist = []
-			for ip in listip :
-				tempip = ByteProcessor(maxw, maxh)
-				tempip.copyBits(ip, 0, 0, Blitter.COPY)
-				resizelist.append(tempip)
 
 		else :
 			resizelist = []
 			for ip in listip :
 				tempip = ByteProcessor(maxw, maxh)
-				tempip.copyBits(ip, 0, 0, Blitter.COPY)
+				xloc = int(math.floor((maxw/2.00) - (ip.width/2.00)))
+				yloc = int(math.floor((maxh/2.00) - (ip.height/2.00)))
+				tempip.copyBits(ip, xloc, yloc, Blitter.COPY)
 				resizelist.append(tempip)
 				
 		ims = ImageStack(maxw, maxh) 	
