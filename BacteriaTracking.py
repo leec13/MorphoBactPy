@@ -206,7 +206,7 @@ class Bacteria_Tracking(object) :
 			if len(self.__positionsList)==0 : tempname = WindowManager.getUniqueName("image")
 			else : tempname = self.__positionsList[0]
 			tempd = tempfile.mkdtemp()
-			fichier = open(tempd+"/"+tempname+".tif","w")
+			fichier = open(tempd+os.path.sep+tempname+".tif","w")
 			rawtimes=[]
 			rawtimes.append(0)
 			zerotimes=0
@@ -218,7 +218,7 @@ class Bacteria_Tracking(object) :
 			
 			fichier.writelines(listfiles[-1]+"\n")
 			fichier.close()
-			IJ.run("Stack From List...","open="+tempd+"/"+tempname+".tif")
+			IJ.run("Stack From List...","open="+tempd+os.path.sep+tempname+".tif")
 			n=WindowManager.getImageCount()
 			tempid=WindowManager.getNthImageID(n)
 			tempimg=WindowManager.getImage(tempid)
@@ -240,7 +240,7 @@ class Bacteria_Tracking(object) :
 				if len(self.__positionsList)==0 : tempname = WindowManager.getUniqueName("image"+str(i+1))
 				else : tempname = self.__positionsList[i]
 				tempd = tempfile.mkdtemp()
-				fichier = open(tempd+"/"+tempname+".tif","w")
+				fichier = open(tempd+os.path.sep+tempname+".tif","w")
 				zerotimes=0
 				for j in range(len(listfiles[i])-1) :
 					difftimes=int((os.stat(listfiles[i][j+1]).st_mtime-os.stat(listfiles[i][j]).st_mtime))
@@ -250,7 +250,7 @@ class Bacteria_Tracking(object) :
 
 				fichier.writelines(listfiles[i][-1]+"\n")
 				fichier.close()
-				IJ.run("Stack From List...","open="+tempd+"/"+tempname+".tif")
+				IJ.run("Stack From List...","open="+tempd+os.path.sep+tempname+".tif")
 				n=WindowManager.getImageCount()
 				tempid=WindowManager.getNthImageID(n)
 				tempimg=WindowManager.getImage(tempid)
@@ -511,7 +511,7 @@ class Bacteria_Tracking(object) :
 		# if the user wants to save files, .zip for the ROIs are saved.
 		#if self.__optionSave == True : 
 		#os.mkdir(self.__pathdir+"ROIs/", mode=0777)
-		os.makedirs(self.__pathdir+"ROIs/", mode=0777)
+		os.makedirs(self.__pathdir+"ROIs"+os.path.sep, mode=0777)
 		tempimp = IJ.createImage("tempimp", "8-bit Black", self.__dictImages[nameimage].getWidth(), self.__dictImages[nameimage].getHeight(), 1)
 		tempimp.show()
 		for cellname in self.__dict[nameimage].keys() :
@@ -543,7 +543,7 @@ class Bacteria_Tracking(object) :
 				#	name=s+name
 				#	self.__dict[nameimage][cellname].getRoi(numslice).setName(name)
 				#	rm.addRoi(self.__dict[nameimage][cellname].getRoi(numslice))
-			rm.runCommand("Save", self.__pathdir+"ROIs/"+cellname+".zip")
+			rm.runCommand("Save", self.__pathdir+"ROIs"+os.path.sep+cellname+".zip")
 			rm.runCommand("reset")
 		
 		tempimp.close()
@@ -701,13 +701,13 @@ class Bacteria_Tracking(object) :
 	def __SaveCells(self,nameimage):
 
 		#os.mkdir(self.__pathdir+"Cells/", mode=0777)
-		os.makedirs(self.__pathdir+"Cells/", mode=0777)
+		os.makedirs(self.__pathdir+"Cells"+os.path.sep, mode=0777)
 		for cellname in self.__dict[nameimage].keys():
 
-			fichiertemp = open(self.__pathdir+"Cells/"+cellname+".cell","w")
+			fichiertemp = open(self.__pathdir+"Cells"+os.path.sep+cellname+".cell","w")
 			fichiertemp.write("NAMECELL="+cellname+"\n")
-			fichiertemp.write("PATHCELL="+self.__pathdir+"Cells/"+cellname+".cell\n")
-			fichiertemp.write("PATHROIS="+self.__pathdir+"ROIs/"+cellname+".zip\n")
+			fichiertemp.write("PATHCELL="+self.__pathdir+"Cells"+os.path.sep+cellname+".cell\n")
+			fichiertemp.write("PATHROIS="+self.__pathdir+"ROIs"+os.path.sep+cellname+".zip\n")
 			fichiertemp.write("NSLICES="+str(len(self.__dict[nameimage][cellname].getListRoi()))+"\n")
 			fichiertemp.write("SLICEINIT="+str(self.__dict[nameimage][cellname].getSlideInit())+"\n")
 			fichiertemp.write("SLICEEND="+str(self.__dict[nameimage][cellname].getSlideEnd())+"\n")

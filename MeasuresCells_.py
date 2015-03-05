@@ -228,7 +228,7 @@ class MeasuresCells(object) :
 		#self.__pathdir=IJ.getDirectory("image")
 		#self.__pathdir=IJ.getDirectory("")
 
-		#self.__pathdir=self.__pathdir+imp.getShortTitle()+"/"+time.strftime('%d-%m-%y_%Hh%Mm%Ss',time.localtime())+"/"
+		#self.__pathdir=self.__pathdir+imp.getShortTitle()+os.path.sep+time.strftime('%d-%m-%y_%Hh%Mm%Ss',time.localtime())+os.path.sep
 
 		if self.__pathdir is not None : return True
 		else : return False
@@ -239,7 +239,7 @@ class MeasuresCells(object) :
 		if self.__optionImages :
 			self.__img=IJ.getImage()
 			self.__activeTitle=self.__img.getTitle()			
-			self.__listpaths.append(self.__pathdir+self.__img.getShortTitle()+"/"+self.__time+"/")
+			self.__listpaths.append(self.__pathdir+self.__img.getShortTitle()+os.path.sep+self.__time+os.path.sep)
 			self.__rootpath = self.__listpaths[0]
 			out=self.__selectTrackStack()
 		else : out = self.__selectFiles()
@@ -335,8 +335,8 @@ class MeasuresCells(object) :
 		#self.__imagesnames=["position"+p for p in self.__listfiles[3]]
 		self.__imagesnames=[self.__listfiles[1][0].split("_")[1]+p for p in self.__listfiles[3]]
 		self.__rootpath = self.__pathdir
-		#self.__listpaths = [self.__pathdir+self.__listfiles[0]+p+"/"+self.__time+"/" for p in self.__listfiles[3]]
-		self.__listpaths = [self.__pathdir+self.__listfiles[0]+p+"/"+self.__time+"/" for p in self.__listfiles[3]]
+		#self.__listpaths = [self.__pathdir+self.__listfiles[0]+p+"os.path.sep"+self.__time+os.path.sep for p in self.__listfiles[3]]
+		self.__listpaths = [self.__pathdir+self.__listfiles[0]+p+os.path.sep+self.__time+os.path.sep for p in self.__listfiles[3]]
 		
 		return True
 		
@@ -572,7 +572,7 @@ class MeasuresCells(object) :
 				x = range(1,nbslices+1)
 				namex = "Frame"
 							
-			if not path.exists(self.__rootpath+"Results/") : os.makedirs(self.__rootpath+"/Results/", mode=0777)
+			if not path.exists(self.__rootpath+"Results"+os.path.sep) : os.makedirs(self.__rootpath+os.path.sep+"Results"+os.path.sep, mode=0777)
 			tab="\t"
 			nl="\n"
 			measures=[]
@@ -586,7 +586,7 @@ class MeasuresCells(object) :
 			
 			#for m in self.__measurescompl :
 			for m in self.__dictMeasures[dico[self.__listcellname[0]]].keys() :
-				f = open(self.__rootpath+"Results/"+m+".txt", mode)
+				f = open(self.__rootpath+"Results"+os.path.sep+m+".txt", mode)
 				#f.write(m+nl)
 				f.write(imgName+"-"+self.__time+"-"+m+"-"+namex+tab+headstring+nl)
 				if len(self.__listcellname) == 0 : f.write("no cells")
@@ -602,7 +602,7 @@ class MeasuresCells(object) :
 
 			if self.__measuresparambool_global[0] :
 				m = "Latency"
-				f = open(self.__rootpath+"Results/"+m+".txt", mode)
+				f = open(self.__rootpath+"Results"+os.path.sep+m+".txt", mode)
 				f.write(imgName+"-"+self.__time+"-"+m+nl)
 				for i in range(len(self.__listcellname)) :
 					#if latencies[i][0] : line=self.__listcellname[i]+"\t"+str(latencies[i][1])
@@ -713,10 +713,10 @@ class MeasuresCells(object) :
 			try : 
 				self.__gw
 			except AttributeError :
-				if not path.exists(self.__pathdir+"Selected-Cells/") : os.makedirs(self.__pathdir+"/Selected-Cells/", mode=0777)				
+				if not path.exists(self.__pathdir+"Selected-Cells"+os.path.sep) : os.makedirs(self.__pathdir+os.path.sep+"Selected-Cells"+os.path.sep, mode=0777)				
 				self.__gw = CellsSelection()
 				self.__gw.setTitle(imgName)
-				self.__gw.run(self.__allcells, self.__pathdir+"ROIs/")
+				self.__gw.run(self.__allcells, self.__pathdir+"ROIs"+os.path.sep)
 				self.__gw.show()
 				self.__gw.setSelected(self.__allcells)
 				while not self.__gw.oked and self.__gw.isShowing() : 
@@ -740,10 +740,10 @@ class MeasuresCells(object) :
 
 				else : 
 					self.__gw.dispose()
-					if not path.exists(self.__pathdir+"Selected-Cells/") : os.makedirs(self.__pathdir+"/Selected-Cells/", mode=0777)				
+					if not path.exists(self.__pathdir+"Selected-Cells"+os.path.sep) : os.makedirs(self.__pathdir+os.path.sep+"Selected-Cells"+os.path.sep, mode=0777)				
 					self.__gw = CellsSelection()
 					self.__gw.setTitle(imgName)
-					self.__gw.run(self.__allcells, self.__pathdir+"ROIs/")
+					self.__gw.run(self.__allcells, self.__pathdir+"ROIs"+os.path.sep)
 					self.__gw.show()
 					self.__gw.setSelected(self.__allcells)
 					self.__listcellname[:]=[]
@@ -754,10 +754,13 @@ class MeasuresCells(object) :
 					self.__gw.setLabel("...")
 					self.__gw.hide()
 
-			filestodelet=glob.glob(self.__pathdir+"Selected-Cells/*.cell")
+			filestodelet=glob.glob(self.__pathdir+"Selected-Cells"+os.path.sep+"*.cell")
 			for f in filestodelet : os.remove(f)
 			for cell in self.__listcellname :
-				shutil.copy(self.__pathdir+"Cells/"+cell+".cell",self.__pathdir+"Selected-Cells/"+cell+".cell")
+				sourcestr = self.__pathdir+"Cells"+os.path.sep+cell+".cell"
+				deststr =  self.__pathdir+"Selected-Cells"+os.path.sep+cell+".cell"
+				os.system("copy "+sourcestr+", "+deststr) 
+				#shutil.copy(self.__pathdir+"Cells"+os.path.sep+cell+".cell",self.__pathdir+"Selected-Cells"+os.path.sep+cell+".cell")
 
 			self.__dictNcells[imgName] = len(self.__listcellname)
 		
@@ -1033,7 +1036,7 @@ class MeasuresCells(object) :
 			if len(positionsList)==0 : tempname = WindowManager.getUniqueName("image")
 			else : tempname = positionsList[0]
 			tempd = tempfile.mkdtemp()
-			fichier = open(tempd+"/"+tempname+".tif","w")
+			fichier = open(tempd+os.path.sep+tempname+".tif","w")
 			rawtimes=[]
 			rawtimes.append(0)
 			zerotimes=0
@@ -1045,7 +1048,7 @@ class MeasuresCells(object) :
 			
 			fichier.writelines(listfiles[-1]+"\n")
 			fichier.close()
-			IJ.run("Stack From List...","open="+tempd+"/"+tempname+".tif")
+			IJ.run("Stack From List...","open="+tempd+os.path.sep+tempname+".tif")
 			n=WindowManager.getImageCount()
 			tempid=WindowManager.getNthImageID(n)
 			tempimg=WindowManager.getImage(tempid)
@@ -1066,7 +1069,7 @@ class MeasuresCells(object) :
 				if len(positionsList)==0 : tempname = WindowManager.getUniqueName("image"+str(i+1))
 				else : tempname = positionsList[i]
 				tempd = tempfile.mkdtemp()
-				fichier = open(tempd+"/"+tempname+".tif","w")
+				fichier = open(tempd+os.path.sep+tempname+".tif","w")
 				zerotimes=0
 				for j in range(len(listfiles[i])-1) :
 					difftimes=int((os.stat(listfiles[i][j+1]).st_mtime-os.stat(listfiles[i][j]).st_mtime))
@@ -1076,7 +1079,7 @@ class MeasuresCells(object) :
 
 				fichier.writelines(listfiles[i][-1]+"\n")
 				fichier.close()
-				IJ.run("Stack From List...","open="+tempd+"/"+tempname+".tif")
+				IJ.run("Stack From List...","open="+tempd+os.path.sep+tempname+".tif")
 				n=WindowManager.getImageCount()
 				tempid=WindowManager.getNthImageID(n)
 				tempimg=WindowManager.getImage(tempid)
@@ -1113,7 +1116,7 @@ class MeasuresCells(object) :
 			IJ.showMessage("Select the folder 'Cells' containing the cells to import")
 			selectdir=IJ.getDirectory("image")
 			selectdir=IJ.getDirectory("")
-			listfilescells.extend(glob.glob(selectdir+"/*"))
+			listfilescells.extend(glob.glob(selectdir+os.path.sep+"*"))
 			listpaths.append("")
 
 		else : 
@@ -1126,7 +1129,7 @@ class MeasuresCells(object) :
 			selectdir = fd.getDirectory() 
 			textfile = fd.getFile()
 			fichier = open(selectdir+textfile,"r")
-			listpaths=[ glob.glob(f.split("\n")[0]+"Selected-Cells"+"/*") for f in fichier.readlines()]
+			listpaths=[ glob.glob(f.split("\n")[0]+"Selected-Cells"+os.path.sep+"*") for f in fichier.readlines()]
 
 			#for f in templist : 
 			#	listpaths.append(f.split("\n")+"Cells")
@@ -1208,8 +1211,8 @@ class MeasuresCells(object) :
 			rm.runCommand("Show None")
 			rm.runCommand("Show All")
 
-			roipath = os.path.split(pathtemp[0])[0]+"/"
-			rootpath = roipath.rsplit("/", 2)[0]+"/"
+			roipath = os.path.split(pathtemp[0])[0]+os.path.sep
+			rootpath = roipath.rsplit(os.path.sep, 2)[0]+os.path.sep
 
 			self.__listpaths[j] = rootpath
 			self.__rootpath=rootpath

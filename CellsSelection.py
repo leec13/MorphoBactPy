@@ -244,14 +244,14 @@ class CellsSelection(swing.JFrame):
 			self.__rm.runCommand("Save", self.__path+cellname+"-b.zip")
 			self.__rm.runCommand("reset")
 
-		root = self.__path.rsplit("/", 2)[0]+"/"
+		root = self.__path.rsplit(os.path.sep, 2)[0]+os.path.sep
 		
-		if not path.exists(root+"Cells/") :os.makedirs(root+"Cells/", mode=0777)
+		if not path.exists(root+"Cells"+os.path.sep) :os.makedirs(root+"Cells"+os.path.sep, mode=0777)
 
-		fichiertemp = open(root+"Cells/"+cellname+"-a.cell","w")
+		fichiertemp = open(root+"Cells"+os.path.sep+cellname+"-a.cell","w")
 		fichiertemp.write("NAMECELL="+cellname+"-a\n")
-		fichiertemp.write("PATHCELL="+root+"Cells/"+cellname+"-a.cell\n")
-		fichiertemp.write("PATHROIS="+root+"ROIs/"+cellname+"-a.zip\n")
+		fichiertemp.write("PATHCELL="+root+"Cells"+os.path.sep+cellname+"-a.cell\n")
+		fichiertemp.write("PATHROIS="+root+"ROIs"+os.path.sep+cellname+"-a.zip\n")
 		fichiertemp.write("NSLICES="+str(len(rois))+"\n")
 		fichiertemp.write("SLICEINIT="+str(1)+"\n")
 		fichiertemp.write("SLICEEND="+str(n)+"\n")
@@ -261,10 +261,10 @@ class CellsSelection(swing.JFrame):
 		fichiertemp.write("COLOR="+str(r)+";"+str(g)+";"+str(b)+"\n")
 		fichiertemp.close()
 
-		fichiertemp = open(root+"Cells/"+cellname+"-b.cell","w")
+		fichiertemp = open(root+"Cells"+os.path.sep+cellname+"-b.cell","w")
 		fichiertemp.write("NAMECELL="+cellname+"-b\n")
-		fichiertemp.write("PATHCELL="+root+"Cells/"+cellname+"-b.cell\n")
-		fichiertemp.write("PATHROIS="+root+"ROIs/"+cellname+"-b.zip\n")
+		fichiertemp.write("PATHCELL="+root+"Cells"+os.path.sep+cellname+"-b.cell\n")
+		fichiertemp.write("PATHROIS="+root+"ROIs"+os.path.sep+cellname+"-b.zip\n")
 		fichiertemp.write("NSLICES="+str(len(rois))+"\n")
 		fichiertemp.write("SLICEINIT="+str(n+1)+"\n")
 		fichiertemp.write("SLICEEND="+str(len(rois))+"\n")
