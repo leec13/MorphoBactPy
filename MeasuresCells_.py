@@ -759,8 +759,9 @@ class MeasuresCells(object) :
 			for cell in self.__listcellname :
 				sourcestr = self.__pathdir+"Cells"+os.path.sep+cell+".cell"
 				deststr =  self.__pathdir+"Selected-Cells"+os.path.sep+cell+".cell"
-				os.system("copy "+sourcestr+", "+deststr) 
+				#os.system("copy "+sourcestr+", "+deststr) 
 				#shutil.copy(self.__pathdir+"Cells"+os.path.sep+cell+".cell",self.__pathdir+"Selected-Cells"+os.path.sep+cell+".cell")
+				shutil.copy(sourcestr,deststr)
 
 			self.__dictNcells[imgName] = len(self.__listcellname)
 		
